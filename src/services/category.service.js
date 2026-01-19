@@ -1,7 +1,6 @@
 import { STOREGE_KEY } from "../constants/storegekeys"
 import { getRequest, setRequest } from "../utils/storegehelper"
-import CategoryAdd from "../CategoryAdd";
-
+import CategoryAdd from "../pages/admin-panel/CategoryAdd";
 const getAll =async() =>{
     return getRequest(STOREGE_KEY.CATEGORY);
 }

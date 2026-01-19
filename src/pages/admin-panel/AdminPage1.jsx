@@ -1,20 +1,17 @@
-
-
-
 import React from "react";
-import NavBar from "./components/NavBar";
-import DashBoardBar from "./components/DashBoardBar";
+import NavBar1 from "../../components/layout/NavBar1";
+import DashBoardBar1 from "../../components/layout/DashBoardBar1";
 
 export default function AdminPage1() {
   return (
-    <div className="flex min-h-screen bg-[#f6faf7]">
+    <div className=" lg:flex min-h-screen bg-[#f6faf7]">
       
       {/* Sidebar */}
-      <NavBar />
+      <NavBar1 />
 
       {/* Main Content */}
       <div className="flex-1">
-        <DashBoardBar name="Dashboard" />
+        <DashBoardBar1 name="Dashboard" />
 
         <div className="p-6">
           

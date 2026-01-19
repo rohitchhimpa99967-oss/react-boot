@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import NavBar from "./components/NavBar";
-import DashBoardBar from "./components/DashBoardBar";
+import NavBar1 from "../../components/layout/NavBar1";
+import DashBoardBar1 from "../../components/layout/DashBoardBar1";
 
 export default function Bill() {
   const printRef = useRef();
@@ -71,11 +71,11 @@ export default function Bill() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#f6faf7]">
-      <NavBar />
+    <div className="lg:flex min-h-screen bg-[#f6faf7]">
+      <NavBar1 />
 
       <div className="flex-1">
-        <DashBoardBar name="Bill Counter" />
+        <DashBoardBar1 name="Bill Counter" />
 
         <div className="p-6">
           {/* Tabs */}

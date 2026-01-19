@@ -2,11 +2,10 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "./components/NavBar";
-import EditButton from "./components/buttons/EditButton";
-import DeleteButton from "./components/buttons/DeleteButton";
-import DashBoardBar from "./components/DashBoardBar";
-
+import NavBar1 from "../../components/layout/NavBar1";
+import EditButton from "../../components/buttons/EditButton";
+import DeleteButton from "../../components/buttons/DeleteButton";
+import DashBoardBar1 from "../../components/layout/DashBoardBar1";
 export default function CategoryPage() {
   const navigate = useNavigate();
 
@@ -15,14 +14,17 @@ export default function CategoryPage() {
     { name: "Burger", img: "/src/assets/images/photo2.jpg" },
     { name: "Pasta", img: "/src/assets/images/photo3.jpg" },
     { name: "Dessert", img: "/src/assets/images/photo4.jpg" },
+    { name: "Chinese", img: "/src/assets/images/photo5.jpg" },
+    { name: "Drinks", img: "/src/assets/images/photo6.jpg" },
+    { name: "Snacks", img: "/src/assets/images/photo4.jpg" },
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#f6faf7]">
-      <NavBar />
+    <div className="lg:flex min-h-screen bg-[#f6faf7]">
+      <NavBar1 />
 
       <div className="flex-1">
-        <DashBoardBar name="Categories" />
+        <DashBoardBar1 name="Categories" />
 
         <div className="p-6">
           {/* Header */}

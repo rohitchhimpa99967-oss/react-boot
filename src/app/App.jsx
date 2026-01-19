@@ -1,39 +1,27 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import LandingPage from "./LandingPage";
-import Password from "./Password";
-import NavBar from "./components/NavBar";
-import AdminPage1 from "./AdminPage1";
-import CategoryPage from "./CategoryPage";
-import CategoryAdd from "./CategoryAdd";
-import ProductPage from "./ProductPage";
-import ProductAdd from "./ProductAdd";
-import OrderPage from "./OrderPage";
-import SalesPage from "./Sales";
+import "../styles/App.css";
+import LandingPage from "../pages/LandingPage";
+import NavBar1 from "../components/layout/NavBar1";
+import AdminPage1 from "../pages/admin-panel/AdminPage1";
+import CategoryAdd from "../pages/admin-panel/CategoryAdd";
+import CategoryPage from "../pages/admin-panel/CategoryPage";
+import ProductPage from "../pages/admin-panel/ProductPage";
+import ProductAdd from "../pages/admin-panel/ProductAdd";
+import OrderPage from "../pages/admin-panel/OrderPage"
+import SalesPage from "../pages/admin-panel/Sales";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Bill from "./Bill";
+import Bill from "../pages/admin-panel/Bill";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      {/* <LandingPage/> */}
-      {/* {<NavBar/>} */}
-      {/* <Password/> */}
-      {/* {<AdminPage1/>} */}
-      {/* {<CategoryPage/>} */}
-      {/* {<CategoryAdd/>} */}
-      {/* {<ProductPage/>}   */}
-      {/* {<ProductAdd/>} */}
-      {/* {<OrderPage/>} */}
-      {/* {<SalesPage/>} */}
+     
       <BrowserRouter>
         <Routes>
           {/* Dashboard */}
-          {/* <Route path="/" element={<NavBar />} /> */}
+          {/* <Route path="/" element={<NavBar1 />} /> */}
 
           <Route path="/" element={<AdminPage1 />} />
           <Route path="/l" element={<LandingPage />} />

@@ -1,10 +1,6 @@
-
-
-
-
 import React, { useState } from "react";
-import NavBar from "./components/NavBar";
-import DashBoardBar from "./components/DashBoardBar";
+import NavBar1 from "../../components/layout/NavBar1";
+import DashBoardBar1 from "../../components/layout/DashBoardBar1";
 
 export default function KitchenPage() {
   const orders = [
@@ -64,11 +60,11 @@ export default function KitchenPage() {
   });
 
   return (
-    <div className="flex min-h-screen bg-[#f6faf7]">
-      <NavBar />
+    <div className="lg:flex min-h-screen bg-[#f6faf7]">
+      <NavBar1 />
 
       <div className="flex-1">
-        <DashBoardBar name="Kitchen Orders" />
+        <DashBoardBar1 name="Kitchen Orders" />
 
         <div className="p-6">
           {/* Heading */}
