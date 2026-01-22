@@ -1,65 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "../src/styles/app.css";
+import AppRouter from "./Router";
 
-import { Route, Routes } from 'react-router-dom'
-
-import Password from './pages/auth/Password'
-import Forgotpass from './pages/auth/Forgotpass'
-import ResetPassword from './pages/auth/ResetPassword'
-import UserLanding from './pages/user-pannel/UserLanding'
-import UserHome from './pages/user-pannel/UserHome'
-import UserCart from './pages/user-pannel/UserCart'
-import LandingPage from './pages/auth/LandingPage'
+import AdminPage1 from "./pages/admin-panel/AdminPage1";
+import LandingPage from "./pages/LandingPage";
+import CategoryPage from "./pages/admin-panel/CategoryPage";
+import CategoryAdd from "./pages/admin-panel/CategoryAdd";
+import ProductPage from "./pages/admin-panel/ProductPage";
+import ProductAdd from "./pages/admin-panel/ProductAdd";
+import OrderPage from "./pages/admin-panel/OrderPage";
+import SalesPage from "./pages/admin-panel/Sales";
+import Bill from "./pages/admin-panel/Bill";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
-     <>
-     
-     {/* <Routes>
-       <Route path='/' element={<Password/>}/>
-       <Route path='/forgot-password' element={<Forgotpass/>}/>
-       <Route path='/reset-password' element={<ResetPassword/>}/>
-
-
-     </Routes> */}
-
-     
-
-      {/* these are the admin pannel   */}
-
-       {/* <LandingPage/>  
-
-      <Password/>
-      <Forgotpass/>
-      <ResetPassword/>  */}
-
-
-
-     {/* these are the user pages */}
-
-  
-     {/* <Routes>
-       <Route path='/' element={<UserHome/>}/>
-       <Route path='/User-cart' element={<UserCart/>}/>
-       <Route path='/User-Home' element={<UserHome/>}/>
-     </Routes>  */}
-
-    {/* <UserLanding/> 
-
-    
-     <UserHome/> 
-
-    <UserCart/> */}
-
-   
-
-     </>
-  )
+    <>
+      
+    <AppRouter/>
+    </>
+  );
 }
 
-export default App
+export default App;

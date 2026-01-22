@@ -2,13 +2,21 @@
 
 
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 
 export default function NavBar1() {
   const [open, setOpen] = useState(false);
+const navigate = useNavigate(); 
+  const logout=()=>
+  {
+localStorage.removeItem("token");
+navigate("/")
+
+
+  }
 
   const menuItems = [
-    { name: "Home", icon: "fa-solid fa-house", path: "/" },
+    { name: "Home", icon: "fa-solid fa-house", path: "/admin" },
     { name: "Category", icon: "fa-solid fa-list", path: "/category" },
     { name: "Products", icon: "fa-solid fa-bowl-food", path: "/products" },
     { name: "Orders", icon: "fa-solid fa-barcode", path: "/orders" },
@@ -91,7 +99,7 @@ export default function NavBar1() {
             </div>
           </div>
 
-          <button
+          <button onClick={logout}
             className="mt-4 w-full flex items-center justify-center gap-2
                        bg-green-600 text-white px-3 py-2 rounded-lg
                        hover:bg-green-700 transition"
