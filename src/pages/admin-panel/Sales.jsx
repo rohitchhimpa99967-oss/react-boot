@@ -40,85 +40,70 @@ export default function SalesPage() {
   ];
 
   return (
-    <div className="lg:flex min-h-screen bg-[#f6faf7]">
-      <NavBar1 />
-
-      <div className="flex-1">
-        <DashBoardBar1 name="Sales" />
-
-        <div className="p-4 sm:p-6">
-          {/* STATS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {salesStats.map((stat, idx) => (
-              <div
-                key={idx}
-                className="bg-white border border-green-100 rounded-xl p-4 shadow flex items-center gap-4"
-              >
-                <div className="w-11 h-11 flex items-center justify-center rounded-full bg-green-100 text-green-700">
-                  <i className={`fa-solid ${stat.icon}`}></i>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">{stat.title}</p>
-                  <h3 className="text-lg font-bold text-gray-800">
-                    {stat.value}
-                  </h3>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* TABLE */}
-          <div className="bg-white rounded-xl shadow border border-green-100 overflow-hidden">
-            <div className="p-4 border-b">
-              <h2 className="text-lg font-bold text-green-700">
-                Recent Orders
-              </h2>
+    <div className="p-4 sm:p-6">
+      {/* STATS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {salesStats.map((stat, idx) => (
+          <div
+            key={idx}
+            className="bg-white border border-green-100 rounded-xl p-4 shadow flex items-center gap-4"
+          >
+            <div className="w-11 h-11 flex items-center justify-center rounded-full bg-green-100 text-green-700">
+              <i className={`fa-solid ${stat.icon}`}></i>
             </div>
+            <div>
+              <p className="text-xs text-gray-500">{stat.title}</p>
+              <h3 className="text-lg font-bold text-gray-800">{stat.value}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-green-50 text-green-700">
-                  <tr>
-                    <th className="p-3">Order</th>
-                    <th className="p-3">Table</th>
-                    <th className="p-3">Amount</th>
-                    <th className="p-3">Date</th>
-                    <th className="p-3">Status</th>
-                    <th className="p-3">Action</th>
-                  </tr>
-                </thead>
+      {/* TABLE */}
+      <div className="bg-white rounded-xl shadow border border-green-100 overflow-hidden">
+        <div className="p-4 border-b">
+          <h2 className="text-lg font-bold text-green-700">Recent Orders</h2>
+        </div>
 
-                <tbody>
-                  {salesData.map((sale) => (
-                    <tr
-                      key={sale.id}
-                      className="border-b hover:bg-green-50"
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-green-50 text-green-700">
+              <tr>
+                <th className="p-3">Order</th>
+                <th className="p-3">Table</th>
+                <th className="p-3">Amount</th>
+                <th className="p-3">Date</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {salesData.map((sale) => (
+                <tr key={sale.id} className="border-b hover:bg-green-50">
+                  <td className="p-3 font-semibold">#{sale.id}</td>
+                  <td className="p-3">Table {sale.table}</td>
+                  <td className="p-3 font-semibold text-green-700">
+                    {sale.amount}
+                  </td>
+                  <td className="p-3">{sale.date}</td>
+                  <td className="p-3">
+                    <span className="px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                      {sale.status}
+                    </span>
+                  </td>
+                  <td className="p-3">
+                    <button
+                      onClick={() => setSelectedOrder(sale)}
+                      className="px-3 py-1.5 text-xs rounded-md bg-green-600 text-white hover:bg-green-700"
                     >
-                      <td className="p-3 font-semibold">#{sale.id}</td>
-                      <td className="p-3">Table {sale.table}</td>
-                      <td className="p-3 font-semibold text-green-700">
-                        {sale.amount}
-                      </td>
-                      <td className="p-3">{sale.date}</td>
-                      <td className="p-3">
-                        <span className="px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                          {sale.status}
-                        </span>
-                      </td>
-                      <td className="p-3">
-                        <button
-                          onClick={() => setSelectedOrder(sale)}
-                          className="px-3 py-1.5 text-xs rounded-md bg-green-600 text-white hover:bg-green-700"
-                        >
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 

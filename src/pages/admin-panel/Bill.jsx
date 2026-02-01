@@ -45,7 +45,9 @@ export default function Bill() {
   };
 
   const filteredOrders = orders.filter((o) =>
-    activeTab === "current" ? o.status !== "Completed" : o.status === "Completed"
+    activeTab === "current"
+      ? o.status !== "Completed"
+      : o.status === "Completed",
   );
 
   const handlePrint = () => {
@@ -71,109 +73,96 @@ export default function Bill() {
   };
 
   return (
-    <div className="lg:flex min-h-screen bg-[#f6faf7]">
-      <NavBar1 />
+    <div className="p-6">
+      {/* Tabs */}
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={() => setActiveTab("current")}
+          className={`px-5 py-2 rounded-full font-semibold ${
+            activeTab === "current"
+              ? "bg-orange-500 text-white"
+              : "bg-white border"
+          }`}
+        >
+          Current
+        </button>
+        <button
+          onClick={() => setActiveTab("delivered")}
+          className={`px-5 py-2 rounded-full font-semibold ${
+            activeTab === "delivered"
+              ? "bg-green-600 text-white"
+              : "bg-white border"
+          }`}
+        >
+          Completed
+        </button>
+      </div>
 
-      <div className="flex-1">
-        <DashBoardBar1 name="Bill Counter" />
+      {/* Bills */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredOrders.map((order, idx) => {
+          const total = order.items.reduce(
+            (sum, i) => sum + i.qty * i.price,
+            0,
+          );
 
-        <div className="p-6">
-          {/* Tabs */}
-          <div className="flex gap-4 mb-6">
-            <button
-              onClick={() => setActiveTab("current")}
-              className={`px-5 py-2 rounded-full font-semibold ${
-                activeTab === "current"
-                  ? "bg-orange-500 text-white"
-                  : "bg-white border"
-              }`}
-            >
-              Current
-            </button>
-            <button
-              onClick={() => setActiveTab("delivered")}
-              className={`px-5 py-2 rounded-full font-semibold ${
-                activeTab === "delivered"
-                  ? "bg-green-600 text-white"
-                  : "bg-white border"
-              }`}
-            >
-              Completed
-            </button>
-          </div>
-
-          {/* Bills */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredOrders.map((order, idx) => {
-              const total = order.items.reduce(
-                (sum, i) => sum + i.qty * i.price,
-                0
-              );
-
-              return (
-                <div
-                  key={idx}
-                  className="bg-white rounded-xl shadow-md border p-5"
+          return (
+            <div key={idx} className="bg-white rounded-xl shadow-md border p-5">
+              {/* HEADER */}
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-bold text-lg">Table #{order.table}</h3>
+                <span
+                  className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusClass(
+                    order.status,
+                  )}`}
                 >
-                  {/* HEADER */}
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-bold text-lg">
-                      Table #{order.table}
-                    </h3>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusClass(
-                        order.status
-                      )}`}
-                    >
-                      {order.status}
-                    </span>
-                  </div>
+                  {order.status}
+                </span>
+              </div>
 
-                  {/* BILL CONTENT */}
-                  <div ref={printRef}>
-                    <h2 className="font-bold mb-2">Restaurant Bill</h2>
-                    <table>
-                      <tbody>
-                        {order.items.map((item, i) => (
-                          <tr key={i}>
-                            <td>{item.name}</td>
-                            <td>x{item.qty}</td>
-                            <td align="right">₹{item.price}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+              {/* BILL CONTENT */}
+              <div ref={printRef}>
+                <h2 className="font-bold mb-2">Restaurant Bill</h2>
+                <table>
+                  <tbody>
+                    {order.items.map((item, i) => (
+                      <tr key={i}>
+                        <td>{item.name}</td>
+                        <td>x{item.qty}</td>
+                        <td align="right">₹{item.price}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-                    <div className="total">Total: ₹{total}</div>
-                  </div>
+                <div className="total">Total: ₹{total}</div>
+              </div>
 
-                  {/* NOTE */}
-                  {order.note && (
-                    <div className="mt-2 text-sm bg-yellow-50 p-2 rounded">
-                      📝 {order.note}
-                    </div>
-                  )}
-
-                  {/* ACTIONS */}
-                  <div className="mt-4 flex gap-2">
-                    <button
-                      onClick={handlePrint}
-                      className="flex-1 bg-gray-800 text-white py-2 rounded-lg"
-                    >
-                      🖨 Print
-                    </button>
-
-                    {order.status !== "Completed" && (
-                      <button className="flex-1 bg-green-600 text-white py-2 rounded-lg">
-                        Done
-                      </button>
-                    )}
-                  </div>
+              {/* NOTE */}
+              {order.note && (
+                <div className="mt-2 text-sm bg-yellow-50 p-2 rounded">
+                  📝 {order.note}
                 </div>
-              );
-            })}
-          </div>
-        </div>
+              )}
+
+              {/* ACTIONS */}
+              <div className="mt-4 flex gap-2">
+                <button
+                  onClick={handlePrint}
+                  className="flex-1 bg-gray-800 text-white py-2 rounded-lg"
+                >
+                  🖨 Print
+                </button>
+
+                {order.status !== "Completed" && (
+                  <button className="flex-1 bg-green-600 text-white py-2 rounded-lg">
+                    Done
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

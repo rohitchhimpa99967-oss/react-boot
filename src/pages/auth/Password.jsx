@@ -18,6 +18,7 @@ const Password = () => {
       navigate("/admin");
     }
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const [loginError, setLoginError] = useState("");
 
@@ -84,17 +85,31 @@ const Password = () => {
             )}
           </div>
 
-          {/* PASSWORD */}
           <div className="mt-5">
             <label className="text-[20px] block mb-1">Password :-</label>
-            <input
-              type="password"
-              {...register("password", {
-                required: "Password is required",
-              })}
-              placeholder="Enter Password"
-              className="text-red-500 border border-black rounded-md w-60 p-1"
-            />
+            <div className="relative w-60">
+              <input
+                type={showPassword ? "text" : "password"}
+                {...register("password", {
+                  required: "Password is required",
+                })}
+                placeholder="Enter Password"
+                className="text-red-500 border border-black rounded-md w-full p-1 pr-8"
+              />
+
+              {/* 👁 Eye Button */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600"
+              >
+                <i
+                  className={`fa-solid ${
+                    showPassword ? "fa-eye-slash" : "fa-eye"
+                  }`}
+                ></i>
+              </button>
+            </div>
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.password.message}
@@ -104,6 +119,11 @@ const Password = () => {
               <Link to="/forgetpassword">
                 <span className="text-blue-600 text-sm cursor-pointer">
                   Forgot Password
+                </span>
+              </Link>
+              <Link to="/registeruser">
+                <span className="text-blue-600 ml-2 text-sm cursor-pointer">
+                  Sign Up
                 </span>
               </Link>
             </div>
