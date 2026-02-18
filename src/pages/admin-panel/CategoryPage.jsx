@@ -26,21 +26,14 @@ export default function CategoryPage() {
 
   const getCategories = async () => {
     const response = await baseUrl.get("Category");
-    setCategories(response.data);
+    console.log(response)
+    setCategories(response.data.data);
   };
   useEffect(() => {
     getCategories();
   }, []);
 
-  // const categories = [
-  //   { name: "Pizza", img: "/src/assets/images/photo1.jpg" },
-  //   { name: "Burger", img: "/src/assets/images/photo2.jpg" },
-  //   { name: "Pasta", img: "/src/assets/images/photo3.jpg" },
-  //   { name: "Dessert", img: "/src/assets/images/photo4.jpg" },
-  //   { name: "Chinese", img: "/src/assets/images/photo5.jpg" },
-  //   { name: "Drinks", img: "/src/assets/images/photo6.jpg" },
-  //   { name: "Snacks", img: "/src/assets/images/photo4.jpg" },
-  // ];
+
 
   return (
     <div className="p-6 max-w-full">
@@ -65,7 +58,7 @@ export default function CategoryPage() {
           >
             <div className="w-full h-56 rounded-xl overflow-hidden border">
               <img
-                src={`https://apistudent2.codedonor.in${cat.imageUrl}`}
+                src={`https://apistudent2.codedonor.in${cat.profile}`}
                 alt={cat.name}
                 className="w-full h-full object-cover hover:scale-105 transition"
               />
@@ -75,7 +68,7 @@ export default function CategoryPage() {
               {cat.name}
             </h3>
 
-            <div className="flex justify-center gap-3 mt-4">
+            <div className="flex sm:flex-col xl:flex-row justify-center gap-2 mt-3">
               <EditButton
                 onClick={() => navigate(`/category/edit/${cat.id}`)}
               />

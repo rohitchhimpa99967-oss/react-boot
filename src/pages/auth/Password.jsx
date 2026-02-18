@@ -24,7 +24,7 @@ const Password = () => {
 
   const onSubmit = async (values) => {
     try {
-      const response = await baseUrl.post("Auth/login", values);
+      const response = await baseUrl.post("UserLogin/login", values);
       console.log(response.data);
       localStorage.setItem("token", response?.data?.token);
       navigate("/");

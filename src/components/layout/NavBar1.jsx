@@ -24,6 +24,7 @@ export default function NavBar1() {
     { name: "Orders", icon: "fa-solid fa-barcode", path: "/orders" },
     { name: "Sales", icon: "fa-solid fa-receipt", path: "/sales" },
     { name: "Bill", icon: "fa-solid fa-receipt", path: "/bill" },
+    { name: "Tables", icon: "fa-solid fa-table", path: "/tables" },
   ];
 
   return (

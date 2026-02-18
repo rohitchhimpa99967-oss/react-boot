@@ -1,14 +1,16 @@
 // import React, { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
+// import { useNavigate, useParams } from "react-router-dom";
 // import { useForm } from "react-hook-form";
 // import { baseUrl } from "../../services/BaseUrl";
 // import { toast } from "react-toastify";
 
-// export default function ProductAdd() {
+// export default function ProductEdit() {
 //   const [preview, setPreview] = useState(null);
 //   const [image, setImage] = useState(null);
 //   const [categories, setCategories] = useState([]);
 //   const [catId, setCatId] = useState(null);
+//   const [products, setProducts] = useState([]);
+//   const { id } = useParams();
 //   const navigate = useNavigate();
 
 //   const {
@@ -17,8 +19,6 @@
 //     reset,
 //     formState: { errors },
 //   } = useForm();
-
- 
 
 //   const handleFileChange = (e) => {
 //     const file = e.target.files[0];
@@ -35,10 +35,30 @@
 //       console.log(error.response?.data);
 //     }
 //   };
+//   const productGet = async () => {
+//     try {
+//       const response = await baseUrl.get(`Product/${id}`);
+//       const data = response.data;
+//       reset({
+//         name: data.name,
+//         description: data.description,
+//         category: data.categoryId,
+//         price: data.price,
+//       });
+//       if (data.profile) {
+//         setPreview(`https://apistudent2.codedonor.in${data.profile}`); // backend full image URL
+//       }
+//       setProducts(data);
+//       console.log(data);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
 
 //   useEffect(() => {
 //     cateGet();
-//   }, []);
+//     productGet();
+//   }, [id]);
 //   const handleCatSelect = (e) => {
 //     const catId = e.target.value;
 //     setCatId(e.target.value);
@@ -52,22 +72,19 @@
 //       formData.append("description", data.description);
 //       formData.append("categoryId", catId);
 //       formData.append("price", data.price);
+//       formData.append("id", id);
 //       const fileInput = document.querySelector('input[type="file"]');
 //       if (fileInput.files[0]) {
 //         formData.append("image", fileInput.files[0]);
 //       }
 //       const token = localStorage.getItem("token");
-// console.log(data.name)
-//       const response = await baseUrl.post(
-//         "Product/create-with-image",
-//         formData,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "multipart/form-data",
-//           },
+//       console.log(data.name);
+//       const response = await baseUrl.put(`Product/${id}`, formData, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "multipart/form-data",
 //         },
-//       );
+//       });
 //       console.log(response);
 //       navigate("/products");
 //       toast.success("Product Added Successfully ✅");
@@ -89,7 +106,7 @@
 //           <i className="fa-solid fa-angle-left"></i> Back
 //         </button>
 //         <span className="text-3xl font-bold text-center mb-8">
-//           Add a Product
+//           Edit Product
 //         </span>
 //       </div>
 
@@ -148,9 +165,9 @@
 //               className="border px-4 py-2.5 rounded-lg w-full
 //                    focus:ring-2 focus:ring-green-500 outline-none"
 //             />
-//             {errors.productName && (
+//             {errors.Name && (
 //               <p className="text-red-500 text-sm mt-1">
-//                 {errors.productName.message}
+//                 {errors.Name.message}
 //               </p>
 //             )}
 //           </div>
@@ -230,7 +247,7 @@
 //               className="bg-green-600 hover:bg-green-700 text-white
 //                    px-10 py-3 rounded-lg text-sm font-semibold shadow-md"
 //             >
-//               ➕ Add Product
+//               ➕ Edit Product
 //             </button>
 //           </div>
 //         </div>
@@ -241,27 +258,42 @@
 
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { baseUrl } from "../../services/BaseUrl";
 import { toast } from "react-toastify";
 
-export default function ProductAdd() {
+export default function ProductEdit() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: "",
+      description: "",
+      price: "",
+      categoryId: "",
+    },
+  });
 
   // 🔹 Fetch Categories
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  // 🔹 Fetch Product by ID
+  useEffect(() => {
+    if (id) fetchProduct();
+  }, [id]);
 
   const fetchCategories = async () => {
     try {
@@ -273,7 +305,34 @@ export default function ProductAdd() {
     }
   };
 
-  // 🔹 Image Preview
+  const fetchProduct = async () => {
+    try {
+      setLoading(true);
+      const res = await baseUrl.get(`Product/${id}`);
+      const data = res.data;
+
+      console.log("API Response:", data);
+
+      // ✅ setValue se manually set karo
+      setValue("name", data.data.name || "");
+      setValue("description", data.data.description || "");
+      setValue("price", data.data.price || "");
+      setValue("categoryId", data.data.categoryId || "");
+
+      // ✅ Image preview
+      if (data.data.profile) {
+        setPreview(`https://apistudent2.codedonor.in${data.data.profile}`);
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching product:", err);
+      toast.error("Failed to load product");
+      setLoading(false);
+    }
+  };
+
+  // 🔹 Image Change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -282,14 +341,7 @@ export default function ProductAdd() {
     }
   };
 
-  // 🔹 Submit Form
   const onSubmit = async (data) => {
-    // ✅ Check if image is selected
-    if (!selectedFile) {
-      toast.error("Please select an image");
-      return;
-    }
-
     try {
       const formData = new FormData();
 
@@ -297,24 +349,38 @@ export default function ProductAdd() {
       formData.append("description", data.description);
       formData.append("price", data.price);
       formData.append("categoryId", data.categoryId);
-      formData.append("profile", selectedFile);  // ✅ Changed: image -> profile
+
+      // ✅ Agar nayi file select hui hai to wo bhejo
+      if (selectedFile) {
+        formData.append("profile", selectedFile);
+      }
 
       const token = localStorage.getItem("token");
 
-      await baseUrl.post("Product", formData, {
+      await baseUrl.put(`Product/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
 
-      toast.success("Product Added Successfully ✅");
+      toast.success("Product Updated ✅");
       navigate("/products");
     } catch (error) {
-      console.error("Add Product Error:", error);
-      toast.error(error.response?.data?.title || "Failed to add product");
+      console.error("Update Error:", error);
+      toast.error(error.response?.data?.title || "Update failed");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-10">
+        <div className="flex items-center justify-center h-64">
+          <p className="text-xl text-gray-500">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-10">
@@ -325,7 +391,7 @@ export default function ProductAdd() {
         >
           ← Back
         </button>
-        <h1 className="text-3xl font-bold">Add Product</h1>
+        <h1 className="text-3xl font-bold">Edit Product</h1>
       </div>
 
       <form
@@ -334,12 +400,12 @@ export default function ProductAdd() {
       >
         {/* PRODUCT IMAGE */}
         <div>
-          <label className="block mb-3 font-medium">Product Image *</label>
+          <label className="block mb-3 font-medium">Product Image</label>
           <label className="flex items-center justify-center w-full h-56 border-2 border-dashed rounded-xl cursor-pointer hover:border-green-500 transition overflow-hidden bg-gray-50">
             {preview ? (
               <img
                 src={preview}
-                alt="Preview"
+                alt="Product Preview"
                 className="w-full h-full object-cover rounded-xl"
               />
             ) : (
@@ -357,9 +423,9 @@ export default function ProductAdd() {
               onChange={handleFileChange}
             />
           </label>
-          {!selectedFile && (
-            <p className="text-gray-500 text-xs mt-2">* Image is required</p>
-          )}
+          <p className="text-sm text-gray-500 mt-2">
+            {preview ? "Click to change image" : "Click to upload image"}
+          </p>
         </div>
 
         {/* FORM FIELDS */}
@@ -438,7 +504,7 @@ export default function ProductAdd() {
               type="submit"
               className="bg-green-600 text-white px-12 py-3 rounded-lg hover:bg-green-700 transition font-medium"
             >
-              Add Product
+              Update Product
             </button>
           </div>
         </div>

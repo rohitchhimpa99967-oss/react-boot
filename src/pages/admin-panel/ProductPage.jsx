@@ -1,12 +1,138 @@
-//   // const categories = [
-//   //   { name: "Pizza", icon: "fa-pizza-slice" },
-//   //   { name: "Burger", icon: "fa-hamburger" },
-//   //   { name: "Pasta", icon: "fa-bowl-food" },
-//   //   { name: "Dessert", icon: "fa-cake-candles" },
-//   //   { name: "Chinese", icon: "fa-bowl-rice" },
-//   //   { name: "Drinks", icon: "fa-martini-glass" },
-//   //   { name: "Snacks", icon: "fa-cookie" },
-//   // ];
+// import React, { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { baseUrl } from "../../services/BaseUrl";
+// import EditButton from "../../components/buttons/EditButton";
+// import DeleteButton from "../../components/buttons/DeleteButton";
+// import { toast } from "react-toastify";
+
+// export default function ProductPage() {
+//   const navigate = useNavigate();
+
+//   const [categories, setCategories] = useState([]);
+//   const [products, setProducts] = useState([]);
+//   const [selectedCategory, setSelectedCategory] = useState(null);
+
+//   const cateGet = async () => {
+//     try {
+//       const res = await baseUrl.get("Category");
+//       setCategories(res.data);
+
+//       if (res.data.length > 0) {
+//         setSelectedCategory(res.data[0].id);
+//       }
+//     } catch (err) {
+//       console.log(err.response);
+//     }
+//   };
+//   const onDelete = async (id) => {
+//     try {
+//       const response = await baseUrl.delete(`Product/${id}`);
+//       console.log(response.data);
+//       setProducts((prev) => prev.filter((prod) => prod.id !== id));
+//       toast.success("Product Deleted");
+//     } catch (error) {
+//       console.log(error.response?.data);
+//       toast.error(error.response?.data?.message || "Delete failed");
+//     }
+//   };
+//   const productGet = async () => {
+//     try {
+//       const res = await baseUrl.get("Product");
+//       setProducts(res.data);
+//     } catch (err) {
+//       console.log(err.response);
+//     }
+//   };
+
+//   useEffect(() => {
+//     cateGet();
+//     productGet();
+//   }, []);
+
+//   return (
+//     <div className="p-5 max-w-full">
+//       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+//         <h1 className="text-2xl font-bold text-gray-800">Products</h1>
+
+//         <button
+//           onClick={() => navigate("/products/add")}
+//           className="flex w-[170px] items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold shadow-md transition"
+//         >
+//           <i className="fa-solid fa-plus"></i>
+//           Add Product
+//         </button>
+//       </div>
+
+//       {categories.length <= 4 ? (
+//         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+//           {categories.map((cat) => (
+//             <div
+//               key={cat.id}
+//               onClick={() => setSelectedCategory(cat.id)}
+//               className={`flex flex-col items-center p-4 rounded-xl cursor-pointer border transition
+//                 ${
+//                   selectedCategory === cat.id
+//                     ? "bg-green-500 text-white border-green-500"
+//                     : "bg-white border-green-200 hover:bg-green-100"
+//                 }`}
+//             >
+//               <i className="fa-solid fa-box text-2xl mb-1"></i>
+//               <span className="font-semibold">{cat.name}</span>
+//             </div>
+//           ))}
+//         </div>
+//       ) : (
+//         <div className="mb-8 w-full overflow-x-auto">
+//           <div className="flex gap-4 min-w-max px-2">
+//             {categories.map((cat) => (
+//               <div
+//                 key={cat.id}
+//                 onClick={() => setSelectedCategory(cat.id)}
+//                 className={`min-w-[120px] flex-shrink-0 flex flex-col items-center p-4 rounded-xl cursor-pointer border transition
+//                   ${
+//                     selectedCategory === cat.id
+//                       ? "bg-green-500 text-white border-green-500"
+//                       : "bg-white border-green-200 hover:bg-green-100"
+//                   }`}
+//               >
+//                 <i className="fa-solid fa-box text-2xl mb-1"></i>
+//                 <span className="font-semibold">{cat.name}</span>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       )}
+
+//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+//         {products
+//           .filter((p) => !selectedCategory || p.categoryId === selectedCategory)
+//           .map((prod) => (
+//             <div
+//               key={prod.id}
+//               className="flex flex-col items-center p-4 rounded-2xl bg-white shadow-md"
+//             >
+//               <div className="w-full aspect-square rounded-lg overflow-hidden">
+//                 <img
+//                   src={`https://apistudent2.codedonor.in${prod.profile}`}
+//                   alt={prod.name}
+//                   className="w-full h-full object-cover"
+//                 />
+//               </div>
+
+//               <h2 className="mt-3 font-semibold text-lg text-center">
+//                 {prod.name}
+//               </h2>
+
+//               <div className="flex md:flex-col xl:flex-row gap-2 mt-3">
+//                 <EditButton onClick={()=>navigate(`edit/${prod.id}`)} />
+//                 <DeleteButton onClick={()=>onDelete(prod.id)} />
+//               </div>
+//             </div>
+//           ))}
+//       </div>
+//     </div>
+//   );
+// }
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -21,36 +147,53 @@ export default function ProductPage() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // 🔹 Fetch Categories
   const cateGet = async () => {
     try {
       const res = await baseUrl.get("Category");
-      setCategories(res.data);
+      setCategories(res.data.data); // ✅ Fixed: .dats -> .data
 
-      if (res.data.length > 0) {
-        setSelectedCategory(res.data[0].id);
+      if (res.data.data.length > 0) {
+        setSelectedCategory(res.data.data[0].id);
       }
     } catch (err) {
-      console.log(err.response);
+      console.error("Error fetching categories:", err);
+      toast.error("Failed to load categories");
     }
   };
-  const onDelete = async (id) => {
-    try {
-      const response = await baseUrl.delete(`Product/${id}`);
-      console.log(response.data);
-      setProducts((prev) => prev.filter((prod) => prod.id !== id));
-      toast.success("Product Deleted");
-    } catch (error) {
-      console.log(error.response?.data);
-      toast.error(error.response?.data?.message || "Delete failed");
-    }
-  };
+
+  // 🔹 Fetch Products
   const productGet = async () => {
     try {
+      setLoading(true);
       const res = await baseUrl.get("Product");
-      setProducts(res.data);
+      setProducts(res.data.data); // ✅ Added .data
+      setLoading(false);
     } catch (err) {
-      console.log(err.response);
+      console.error("Error fetching products:", err);
+      toast.error("Failed to load products");
+      setLoading(false);
+    }
+  };
+
+  // 🔹 Delete Product
+  const onDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await baseUrl.delete(`Product/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setProducts((prev) => prev.filter((prod) => prod.id !== id));
+      toast.success("Product Deleted ✅");
+    } catch (error) {
+      console.error("Delete Error:", error);
+      toast.error(error.response?.data?.message || "Delete failed");
     }
   };
 
@@ -59,8 +202,14 @@ export default function ProductPage() {
     productGet();
   }, []);
 
+  // 🔹 Filtered Products
+  const filteredProducts = products.filter(
+    (p) => !selectedCategory || p.categoryId === selectedCategory,
+  );
+
   return (
     <div className="p-5 max-w-full">
+      {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <h1 className="text-2xl font-bold text-gray-800">Products</h1>
 
@@ -73,7 +222,12 @@ export default function ProductPage() {
         </button>
       </div>
 
-      {categories.length <= 4 ? (
+      {/* CATEGORY FILTERS */}
+      {categories.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">
+          No categories found. Please add categories first.
+        </div>
+      ) : categories.length <= 4 ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {categories.map((cat) => (
             <div
@@ -82,18 +236,26 @@ export default function ProductPage() {
               className={`flex flex-col items-center p-4 rounded-xl cursor-pointer border transition
                 ${
                   selectedCategory === cat.id
-                    ? "bg-green-500 text-white border-green-500"
-                    : "bg-white border-green-200 hover:bg-green-100"
+                    ? "bg-green-500 text-white border-green-500 shadow-lg"
+                    : "bg-white border-green-200 hover:bg-green-100 hover:shadow-md"
                 }`}
             >
-              <i className="fa-solid fa-box text-2xl mb-1"></i>
-              <span className="font-semibold">{cat.name}</span>
+              {cat.profile ? (
+                <img
+                  src={`https://apistudent2.codedonor.in${cat.profile}`}
+                  alt={cat.name}
+                  className="w-12 h-12 object-cover rounded-full mb-2"
+                />
+              ) : (
+                <i className="fa-solid fa-box text-2xl mb-2"></i>
+              )}
+              <span className="font-semibold text-sm">{cat.name}</span>
             </div>
           ))}
         </div>
       ) : (
         <div className="mb-8 w-full overflow-x-auto">
-          <div className="flex gap-4 min-w-max px-2">
+          <div className="flex gap-4 min-w-max px-2 pb-2">
             {categories.map((cat) => (
               <div
                 key={cat.id}
@@ -101,45 +263,98 @@ export default function ProductPage() {
                 className={`min-w-[120px] flex-shrink-0 flex flex-col items-center p-4 rounded-xl cursor-pointer border transition
                   ${
                     selectedCategory === cat.id
-                      ? "bg-green-500 text-white border-green-500"
-                      : "bg-white border-green-200 hover:bg-green-100"
+                      ? "bg-green-500 text-white border-green-500 shadow-lg"
+                      : "bg-white border-green-200 hover:bg-green-100 hover:shadow-md"
                   }`}
               >
-                <i className="fa-solid fa-box text-2xl mb-1"></i>
-                <span className="font-semibold">{cat.name}</span>
+                {cat.profile ? (
+                  <img
+                    src={`https://apistudent2.codedonor.in${cat.profile}`}
+                    alt={cat.name}
+                    className="w-12 h-12 object-cover rounded-full mb-2"
+                  />
+                ) : (
+                  <i className="fa-solid fa-box text-2xl mb-2"></i>
+                )}
+                <span className="font-semibold text-sm text-center">
+                  {cat.name}
+                </span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products
-          .filter((p) => !selectedCategory || p.categoryId === selectedCategory)
-          .map((prod) => (
+      {/* LOADING STATE */}
+      {loading ? (
+        <div className="text-center py-16">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent"></div>
+          <p className="mt-4 text-gray-600">Loading products...</p>
+        </div>
+      ) : filteredProducts.length === 0 ? (
+        <div className="text-center py-16 bg-gray-50 rounded-xl">
+          <i className="fa-solid fa-box-open text-6xl text-gray-300 mb-4"></i>
+          <p className="text-xl text-gray-500">No products found</p>
+          <p className="text-gray-400 mt-2">
+            {selectedCategory
+              ? "No products in this category"
+              : "Add your first product to get started"}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredProducts.map((prod) => (
             <div
               key={prod.id}
-              className="flex flex-col items-center p-4 rounded-2xl bg-white shadow-md"
+              className="flex flex-col p-4 rounded-2xl bg-white shadow-md hover:shadow-xl transition-shadow"
             >
-              <div className="w-full aspect-square rounded-lg overflow-hidden">
-                <img
-                  src={`https://apistudent2.codedonor.in${prod.imageUrl}`}
-                  alt={prod.name}
-                  className="w-full h-full object-cover"
-                />
+              {/* PRODUCT IMAGE */}
+              <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
+                {prod.profile ? (
+                  <img
+                    src={`https://apistudent2.codedonor.in${prod.profile}`}
+                    alt={prod.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/300?text=No+Image";
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <i className="fa-solid fa-image text-6xl text-gray-300"></i>
+                  </div>
+                )}
               </div>
 
-              <h2 className="mt-3 font-semibold text-lg text-center">
-                {prod.name}
-              </h2>
+              {/* PRODUCT INFO */}
+              <div className="flex-1 mt-3">
+                <h2 className="font-semibold text-lg text-gray-800 line-clamp-2">
+                  {prod.name}
+                </h2>
+                <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                  {prod.description}
+                </p>
+                <p className="text-xl font-bold text-green-600 mt-2">
+                  ₹{prod.price?.toFixed(2) || "0.00"}
+                </p>
+              </div>
 
-              <div className="flex md:flex-col lg:flex-row gap-2 mt-3">
-                <EditButton />
-                <DeleteButton onClick={()=>onDelete(prod.id)} />
+              {/* ACTION BUTTONS */}
+              <div className="flex gap-2 mt-4">
+                <EditButton
+                  onClick={() => navigate(`/products/edit/${prod.id}`)}
+                  className="flex-1"
+                />
+                <DeleteButton
+                  onClick={() => onDelete(prod.id)}
+                  className="flex-1"
+                />
               </div>
             </div>
           ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

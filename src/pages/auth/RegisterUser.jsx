@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,14 +17,25 @@ export default function Register() {
       navigate("/admin");
     }
   });
-  const onSubmit = async(values) => {
-    console.log("Clicked")
-   try {
+  // const onSubmit = async(values) => {
+  //   console.log("Clicked")
+  //  try {
+  //     const response = await baseUrl.post("User/register", values);
+  //     console.log(response.data);
+  //     navigate("/");
+  //   } catch (error) {
+  //       error?.response?.data?.message || "error"
+  //   }
+  // };
+  const onSubmit = async (values) => {
+    try {
       const response = await baseUrl.post("User/register", values);
-      console.log(response.data);
-      navigate("/");
+
+      navigate("/verify-otp", {
+        state: { email: values.email },
+      });
     } catch (error) {
-        error?.response?.data?.message || "error" 
+      alert(error?.response?.data?.message || "Register failed");
     }
   };
 

@@ -11,26 +11,27 @@ const UserHome = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [cartItem, setCartItem] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(35);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(1);
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const getCategories = async () => {
     try {
       const res = await baseUrl.get("Category");
-      setCategories(res.data);
+      console.log(res)
+      setCategories(res.data.data);
 
-      if (res.data.length > 0) {
-        setSelectedCategory(res.data[0].id);
+      if (res.data.data.length > 0) {
+        setSelectedCategory(res.data.data[0].id);
       }
     } catch (err) {
-      console.log(err.response);
+      console.log("Error");
     }
   };
   const cartAdd = async (prod) => {
     try {
       const payload = {
         productId: prod.id,
-        quantity: 1,
+        quantity: 1
       };
       const response = await baseUrl.post("Cart/add", payload);
       console.log(response);
@@ -55,7 +56,7 @@ const UserHome = () => {
   const productGet = async () => {
     try {
       const res = await baseUrl.get("Product");
-      setProducts(res.data);
+      setProducts(res.data.data);
     } catch (err) {
       console.log(err.response);
     }

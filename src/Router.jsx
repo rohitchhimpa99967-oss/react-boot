@@ -81,6 +81,11 @@ import Layout1 from "./components/layout/Layout1";
 import UserLanding from "./pages/user-pannel/UserLanding";
 import UserHome from "./pages/user-pannel/UserHome";
 import UserCart from "./pages/user-pannel/UserCart";
+import TablePage from "./pages/admin-panel/Table";
+import TableAdd from "./pages/admin-panel/TableAdd";
+import ProductEdit from "./pages/admin-panel/ProductEdit";
+import CategoryEdit from "./pages/admin-panel/CategoryEdit";
+import VerifyOtp from "./pages/auth/VerifyOtp";
 
 const AuthGuard = () => {
   const token = localStorage.getItem("token");
@@ -94,11 +99,12 @@ const AppRouter = () => {
       <Route path="/registeruser" element={<RegisterUser />} />
       <Route path="/forgetpassword" element={<Forgotpass />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      <Route element={<Layout1/>}>
+      <Route path="/verify-otp" element={<VerifyOtp />} />
 
-      <Route path="/user1" element={<UserLanding/>} />
-      <Route path="/user2" element={<UserHome/>} />
-      <Route path="/user3" element={<UserCart/>} />
+      <Route element={<Layout1 />}>
+        <Route path="/user1" element={<UserLanding />} />
+        <Route path="/user2" element={<UserHome />} />
+        <Route path="/user3" element={<UserCart />} />
       </Route>
 
       <Route element={<AuthGuard />}>
@@ -108,15 +114,19 @@ const AppRouter = () => {
 
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/category/add" element={<CategoryAdd />} />
+          <Route path="/category/edit/:id" element={<CategoryEdit />} />
 
           <Route path="/products" element={<ProductPage />} />
           <Route path="/products/add" element={<ProductAdd />} />
+          <Route path="/products/edit/:id" element={<ProductEdit />} />
 
           <Route path="/orders" element={<OrderPage />} />
 
           <Route path="/sales" element={<SalesPage />} />
 
           <Route path="/bill" element={<Bill />} />
+          <Route path="/tables" element={<TablePage />} />
+          <Route path="/tables/add" element={<TableAdd />} />
 
           <Route path="/profile" element={<ProfilePage />} />
         </Route>

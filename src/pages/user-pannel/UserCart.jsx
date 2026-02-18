@@ -111,9 +111,16 @@
 import React, { useEffect, useState } from "react";
 import { baseUrl } from "../../services/BaseUrl";
 import { toast } from "react-toastify";
+import Btn1 from "../../components/buttons/Btn1";
+import { useNavigate } from "react-router-dom";
 
 const UserCart = () => {
-  // const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
+  const handleBack = () => {
+    console.log("clicked");
+    navigate("/user2");
+  };
+
   const [cart, setCart] = useState({ items: [] });
 
   const getCartItems = async () => {
@@ -123,7 +130,7 @@ const UserCart = () => {
 
       setCart(response.data);
     } catch (error) {
-      alert("Error");
+      toast.error("Error Item Loading");
     }
   };
   const updateQty = async (item, type) => {
@@ -143,10 +150,9 @@ const UserCart = () => {
       console.log(err);
     }
   };
-  const orderPlacee=()=>
-  {
-    toast.success("Order Placed")
-  }
+  const orderPlacee = () => {
+    toast.success("Order Placed");
+  };
 
   const removeItem = async (id) => {
     console.log(id);
@@ -166,13 +172,19 @@ const UserCart = () => {
     0,
   );
 
-  // const totalPrice = cart.items.price.reduce((sum, item) => sum + item.price * item.qty, 0);
   useEffect(() => {
     getCartItems();
   }, []);
 
   return (
     <div className="p-6">
+       <button
+          onClick={() => navigate("/user2")}
+          className="flex w-[100px] justify-center items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 my-6 rounded-lg font-semibold shadow-md transition"
+        >
+          
+         Back
+        </button>
       <h1 className="text-2xl font-bold mb-6">My Cart</h1>
 
       {cart.length === 0 ? (
@@ -230,18 +242,19 @@ const UserCart = () => {
         </>
       )}
       <div className="flex justify-center">
-      <button onClick={orderPlacee}
-        className="w-full mt-6 py-3 rounded-xl
+        <button
+          onClick={orderPlacee}
+          className="w-full mt-6 py-3 rounded-xl
   bg-gradient-to-r from-green-600 to-emerald-600
   text-white text-lg font-semibold
   flex items-center justify-center gap-3
   hover:from-black hover:to-gray-800
   hover:scale-[1.02]
   transition-all duration-300 lg:w-[200px]"
-      >
-        <i className="fa-solid fa-bag-shopping"></i>
-        Place Order
-      </button>
+        >
+          <i className="fa-solid fa-bag-shopping"></i>
+          Place Order
+        </button>
       </div>
     </div>
   );
