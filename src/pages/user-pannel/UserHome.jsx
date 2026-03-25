@@ -11,7 +11,11 @@ const UserHome = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [cartItem, setCartItem] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(1);
+    const [tables, setTables] = useState([]);
+  
+   const tableNumberr=1;
+  const [selectedCategoryId, setSelectedCategoryId] = useState(6);
+  const [cart, setCart] = useState([]);
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const getCategories = async () => {
@@ -27,18 +31,76 @@ const UserHome = () => {
       console.log("Error");
     }
   };
-  const cartAdd = async (prod) => {
-    try {
-      const payload = {
-        productId: prod.id,
-        quantity: 1
-      };
-      const response = await baseUrl.post("Cart/add", payload);
-      console.log(response);
-      toast.success("Item Added to cart")
-    } catch (error) {
-      toast.error("Error");
+    const getCartItems = async () => {
+      try {
+        const response = await baseUrl.get("Cart");
+        console.log(response.data.data);
+  
+        setCart(response.data.data);
+      } catch (error) {
+        toast.error("Error Item Loading");
+      }
+    };
+ const cartAdd = async (prod) => {
+  try {
+    // Check karo already cart mein hai?
+    // const existing = cart.find((i) => i.productId === prod.id);
+
+    // if (existing) {
+    //   // Already hai → quantity badhao
+    //   await updateQty(existing, "inc");
+    //   toast.success("Quantity Updated");
+    //   return; // POST call mat karo
+    // }
+  const existing = cart.find((i) => i.productId === prod.id);
+
+    if (existing) {
+      // ← updateQty ki jagah directly PUT call karo
+      const formData = new FormData();
+      formData.append("Quantity", existing.quantity + 1);
+
+      await baseUrl.put(`Cart/${existing.id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      toast.success("Quantity Updated");
+      await getCartItems();
+      return;
     }
+    // Naya item → POST karo
+    const formData = new FormData();
+    formData.append("ProductId", prod.id);
+    formData.append("Quantity", 1);
+    formData.append("TableId", 2);
+
+    await baseUrl.post("Cart", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    await getCartItems();
+    toast.success("Item Added to cart");
+  } catch (error) {
+    toast.error("Error");
+  }
+
+
+  // const cartAdd = async (prod) => {
+  //   try {
+  //      const formData = new FormData();
+  //   formData.append("ProductId", prod.id);
+  //   formData.append("Quantity", 1);
+  //   formData.append("TableId", 2);
+  //    const response = await baseUrl.post("Cart", formData, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //   });
+  //     console.log(response.data);
+  //     getCartItems();
+  //     toast.success("Item Added to cart")
+  //   } catch (error) {
+  //     toast.error("Error");
+  //   }
     // const existingItem = cart.find((item) => item.id === prod.id);
 
     // if (existingItem) {
@@ -52,22 +114,36 @@ const UserHome = () => {
     //   });
     // }
   };
-
+  
+  const getTables = async () => {
+      try {
+        const res = await baseUrl.get("Table");
+        setTables(res.data.data);
+        console.log(res.data.data)
+      } catch (err) {
+        console.log(err);
+      }
+    };
   const productGet = async () => {
     try {
       const res = await baseUrl.get("Product");
       setProducts(res.data.data);
+      console.log(res.data.data  )
+
     } catch (err) {
       console.log(err.response);
     }
   };
+  // console.log(tables)
   useEffect(() => {
     getCategories();
     productGet();
+    getTables()
   }, []);
   const handleCart = () => {
     navigate("/user3");
   };
+ 
 
   return (
     <>
@@ -138,7 +214,7 @@ const UserHome = () => {
             />
           </div>
         </div>
-
+<div>1</div>
         {/* Categories */}
         <div className="grid grid-cols-2 sm:flex gap-6 justify-items-center">
           {categories.map((cat) => (
@@ -161,7 +237,7 @@ const UserHome = () => {
             >
               <div className="overflow-hidden">
                 <img
-                  src={`https://apistudent2.codedonor.in${cat.imageUrl}`}
+                  src={`https://apistudent2.codedonor.in${cat.profile}`}
                   alt={cat.name}
                   className="w-full h-[160px] sm:h-[180px] object-cover
           group-hover:scale-110 transition-transform duration-700"
@@ -196,7 +272,7 @@ const UserHome = () => {
                 >
                   <div className="overflow-hidden rounded-t-xl">
                     <img
-                      src={`https://apistudent2.codedonor.in${prod.imageUrl}`}
+                      src={`https://apistudent2.codedonor.in${prod.profile}`}
                       alt={prod.name}
                       className="w-full h-[160px] object-cover 
             group-hover:scale-110 transition-transform duration-700"

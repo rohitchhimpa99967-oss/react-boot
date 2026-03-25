@@ -9,7 +9,8 @@ const TablePage = () => {
   const getTables = async () => {
     try {
       const res = await baseUrl.get("Table");
-      setTables(res.data);
+      setTables(res.data.data);
+      console.log(res.data.data)
     } catch (err) {
       console.log(err);
     }

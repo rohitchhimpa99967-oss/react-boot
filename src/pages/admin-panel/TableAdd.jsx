@@ -65,7 +65,7 @@ const TableAdd = () => {
         </p>
       )}
     </div>
-
+{/* 
     <div>
       <label className="block mb-2 font-medium text-gray-700">
         Seating Capacity
@@ -87,9 +87,9 @@ const TableAdd = () => {
           {errors.capacity.message}
         </p>
       )}
-    </div>
+    </div> */}
 
-    <div className="flex items-center gap-3">
+    {/* <div className="flex items-center gap-3">
       <input
         type="checkbox"
         defaultChecked
@@ -99,7 +99,7 @@ const TableAdd = () => {
       <label className="font-medium text-gray-700">
         Table Available
       </label>
-    </div>
+    </div> */}
 
     <div className="flex justify-end pt-4">
       <button
