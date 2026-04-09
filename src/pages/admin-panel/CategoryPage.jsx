@@ -58,7 +58,8 @@ export default function CategoryPage() {
           >
             <div className="w-full h-56 rounded-xl overflow-hidden border">
               <img
-                src={`https://apistudent2.codedonor.in${cat.profile}`}
+                // src={`https://apistudent2.codedonor.in${cat.profile}`}
+                src={`https://myrestaurentclean.runasp.net/${cat.profile}`}
                 alt={cat.name}
                 className="w-full h-full object-cover hover:scale-105 transition"
               />

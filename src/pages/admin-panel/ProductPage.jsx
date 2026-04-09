@@ -242,7 +242,8 @@ export default function ProductPage() {
             >
               {cat.profile ? (
                 <img
-                  src={`https://apistudent2.codedonor.in${cat.profile}`}
+                  // src={`https://apistudent2.codedonor.in${cat.profile}`}
+                  src={`https://myrestaurentclean.runasp.net//${cat.profile}`}
                   alt={cat.name}
                   className="w-12 h-12 object-cover rounded-full mb-2"
                 />
@@ -269,7 +270,8 @@ export default function ProductPage() {
               >
                 {cat.profile ? (
                   <img
-                    src={`https://apistudent2.codedonor.in${cat.profile}`}
+                    // src={`https://apistudent2.codedonor.in${cat.profile}`}
+                    src={`https://myrestaurentclean.runasp.net//${cat.profile}`}
                     alt={cat.name}
                     className="w-12 h-12 object-cover rounded-full mb-2"
                   />
@@ -312,13 +314,18 @@ export default function ProductPage() {
               <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
                 {prod.profile ? (
                   <img
-                    src={`https://apistudent2.codedonor.in${prod.profile}`}
+                    // src={`https://apistudent2.codedonor.in${prod.profile}`}
+                    src={`https://myrestaurentclean.runasp.net//${prod.profile}`}
                     alt={prod.name}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.target.src =
-                        "https://via.placeholder.com/300?text=No+Image";
+                        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect width='300' height='300' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23d1d5db' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E";
                     }}
+                    // onError={(e) => {
+                    //   e.target.src =
+                    //     "https://via.placeholder.com/300?text=No+Image";
+                    // }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">

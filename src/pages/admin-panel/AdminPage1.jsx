@@ -3,6 +3,8 @@ import NavBar1 from "../../components/layout/NavBar1";
 import DashBoardBar1 from "../../components/layout/DashBoardBar1";
 
 export default function AdminPage1() {
+   const token = localStorage.getItem("token");
+   console.log(token);
   return (
     <div className="p-6">
       {/* Page Title */}

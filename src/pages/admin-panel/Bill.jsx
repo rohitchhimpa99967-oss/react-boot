@@ -184,6 +184,7 @@
 //     </div>
 //   );
 // }
+
 import React, { useState, useEffect, useRef } from "react";
 import { baseUrl } from "../../services/BaseUrl";
 
@@ -256,7 +257,7 @@ export default function Bill() {
         <button
           onClick={() => setActiveTab("current")}
           className={`px-5 py-2 rounded-full ${
-            activeTab === "current"
+            activeTab === "current" 
               ? "bg-orange-500 text-white"
               : "bg-white border"
           }`}

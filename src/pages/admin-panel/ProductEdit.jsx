@@ -321,7 +321,8 @@ export default function ProductEdit() {
 
       // ✅ Image preview
       if (data.data.profile) {
-        setPreview(`https://apistudent2.codedonor.in${data.data.profile}`);
+        // setPreview(`https://apistudent2.codedonor.in${data.data.profile}`);
+        setPreview(`https://myrestaurentclean.runasp.net/${data.data.profile}`);
       }
 
       setLoading(false);

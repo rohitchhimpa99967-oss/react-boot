@@ -206,21 +206,6 @@ export default function OrderPage() {
     }, 0);
   };
 
-  // ── Status Update ──
-//  const updateStatus = async (orderId, newStatus) => {
-//   try {
-//     await baseUrl.put("Order/status", {  // ← /Order/1 ki jagah Order/status
-//       orderId: orderId,                  // ← orderId body mein bhejo
-//       status: newStatus,
-//     });
-
-//     toast.success("Status Updated!");
-//     await getOrders();
-//   } catch (error) {
-//     console.log("Error:", error.response?.data);
-//     toast.error("Status Update Nahi Hua!");
-//   }
-// };
 
 const updateStatus = async (orderId, newStatus) => {
   try {
@@ -266,7 +251,7 @@ const updateStatus = async (orderId, newStatus) => {
   // ── Tab Filter ──
 const filteredOrders = orders.filter((order) =>
   activeTab === "current" ? order.status !== 3 : order.status === 3
-);
+).sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
 
 console.log("Active Tab:", activeTab);
 console.log("Filtered Orders:", filteredOrders); // ← delivered tab pe kya aa raha hai?
