@@ -169,7 +169,8 @@ export default function ProductPage() {
     try {
       setLoading(true);
       const res = await baseUrl.get("Product");
-      setProducts(res.data.data); // ✅ Added .data
+      setProducts(res.data.data);
+      console.log(res.data.data)
       setLoading(false);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -204,9 +205,8 @@ export default function ProductPage() {
 
   // 🔹 Filtered Products
   const filteredProducts = products.filter(
-    (p) => !selectedCategory || p.categoryId === selectedCategory,
+    (p) => !selectedCategory || p.category.id === selectedCategory,
   );
-
   return (
     <div className="p-5 max-w-full">
       {/* HEADER */}

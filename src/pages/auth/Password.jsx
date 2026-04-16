@@ -24,9 +24,9 @@ const Password = () => {
 
   const onSubmit = async (values) => {
     try {
-      const response = await baseUrl.post("user login/login", values);
-      console.log(response.data);
-      localStorage.setItem("token", response?.data?.token);
+      const response = await baseUrl.post("Auth/login", values);
+      console.log(response.data.data);
+      localStorage.setItem("token", response?.data?.data);
       navigate("/");
     } catch (error) {
       setLoginError(
@@ -37,7 +37,6 @@ const Password = () => {
 
   return (
     <div className="grid grid-cols-1 h-screen md:grid-cols-2">
-      {/* LEFT IMAGE */}
       <div className="bg-[#ffffff] hidden md:flex items-center justify-center">
         <img
           src="/src/assets/Images/undraw_secure-login_m11a-removebg-preview (1).png"
@@ -45,9 +44,7 @@ const Password = () => {
         />
       </div>
 
-      {/* RIGHT FORM */}
       <div className="bg-[#ffffff] flex justify-center items-center flex-col">
-        {/* LOGO */}
         <div>
           <img
             src="/src/assets/images/Logo.png"
@@ -56,7 +53,6 @@ const Password = () => {
           />
         </div>
 
-        {/* CARD */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="p-[50px] sm:p-[60px] rounded-md bg-slate-50"
@@ -67,7 +63,6 @@ const Password = () => {
         >
           <h1 className="text-4xl font-bold mb-5">Super Admin</h1>
 
-          {/* ADMIN ID */}
           <div>
             <label className="text-[20px] block mb-1">Admin Id :-</label>
             <input
@@ -97,7 +92,6 @@ const Password = () => {
                 className="text-red-500 border border-black rounded-md w-full p-1 pr-8"
               />
 
-              {/* 👁 Eye Button */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -136,7 +130,6 @@ const Password = () => {
             )}
           </div>
 
-          {/* LOGIN BUTTON */}
           <button
             type="submit"
             className="w-60 bg-green-500 rounded-md text-white p-2 mt-5 font-semibold hover:bg-green-600 transition"

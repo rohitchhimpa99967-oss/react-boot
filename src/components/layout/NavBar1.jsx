@@ -22,7 +22,7 @@ export default function NavBar1() {
     { name: "Category", icon: "fa-solid fa-list", path: "/category" },
     { name: "Products", icon: "fa-solid fa-bowl-food", path: "/products" },
     { name: "Orders", icon: "fa-solid fa-barcode", path: "/orders" },
-    { name: "Sales", icon: "fa-solid fa-receipt", path: "/sales" },
+    // { name: "Sales", icon: "fa-solid fa-receipt", path: "/sales" },
     { name: "Bill", icon: "fa-solid fa-receipt", path: "/bill" },
     { name: "Tables", icon: "fa-solid fa-table", path: "/tables" },
   ];
@@ -98,9 +98,9 @@ export default function NavBar1() {
             />
             <div>
               <p className="font-semibold text-gray-800 text-sm break-all">
-                {decode?.["Role"]}
+                {decode?.["username"]}
               </p>
-              <p className="text-sm text-green-600">{decode?.["Email"]}</p>
+              {/* <p className="text-sm text-green-600">{decode?.["Email"]}</p> */}
             </div>
           </div>
 

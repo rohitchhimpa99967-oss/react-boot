@@ -8,6 +8,7 @@ const UserCart = () => {
   const navigate = useNavigate();
   const [cartId, setCartId] = useState(null);
   const [cartItems, setCartItems] = useState([]); 
+  console.log(cartItems)
   const [products, setProducts] = useState([]);
 
 
@@ -31,6 +32,7 @@ const UserCart = () => {
     try {
       const res = await baseUrl.get("Product");
       setProducts(res.data.data);
+      console.log(products)
     } catch (err) {
       console.log(err);
     }
@@ -49,14 +51,14 @@ const updateQty = async (item, type) => {
 
     console.log("Updating CartItem:", item.id, "with:", {
       cartId: item.cartId,
-      productId: item.productId,
+      productId: item.product.id,
       quantity: newQty,
       unitPrice: item.unitPrice,
     });
 
     const res = await baseUrl.put(`CartItem/${item.id}`, {
       cartId: item.cartId,
-      productId: item.productId,
+      productId: item.product.id,
       quantity: newQty,
       unitPrice: item.unitPrice,
     });
@@ -81,40 +83,84 @@ const removeItem = async (item) => {
     toast.error("Failed to remove item");
   }
 };
-
-  // ── Place Order ──
-  const placeOrder = async () => {
-    try {
-      const orderData = {
-        tableNo: 1,
-        note: "",
-        items: cartItems.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
-      };
-
-      const orderResponse = await baseUrl.post("Order", orderData);
-      let orderId = orderResponse.data?.data;
-
-      if (!orderId) {
-        const res = await baseUrl.get("Order");
-        const lastOrder = res.data.data.slice(-1)[0];
-        orderId = lastOrder.id;
-      }
-
-      await baseUrl.post(`Bill/from-Order?orderId=${orderId}`);
-
-      // Clear all cart items
-      await Promise.all(cartItems.map((item) => baseUrl.delete(`CartItem/${item.id}`)));
-
-      setCartItems([]);
-      toast.success("Order Placed! 🎉");
-    } catch (err) {
-      console.log(err.response?.data);
-      toast.error("Order Failed ❌");
+ const placeOrder = async () => {
+  try {
+    if (cartItems.length === 0) {
+      toast.error("Cart is empty!");
+      return;
     }
-  };
+
+    const orderResponse = await baseUrl.post("Order", {
+      tableId: 1,
+      note: "",
+    });
+    
+    console.log("Order full response:", orderResponse.data);
+    
+    const orderData = orderResponse.data?.data;
+    const orderId = Array.isArray(orderData) ? orderData[0]?.id : orderData?.id ?? orderData;
+    
+    console.log("Order ID:", orderId);
+
+    if (!orderId) {
+      toast.error("Order ID nahi mila!");
+      return;
+    }
+
+    const orderItemResults = await Promise.all(
+      cartItems.map((item) =>
+        baseUrl.post("OrderItem", {
+          orderId: orderId,
+          productId: item.product.id,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+        })
+      )
+    );
+    console.log("OrderItems added:", orderItemResults.map(r => r.data));
+
+    const billResponse = await baseUrl.post("Bill", {
+      tableId: 1,
+      note: "",
+    });
+
+    console.log("Bill full response:", billResponse.data);
+
+    const billData = billResponse.data?.data;
+    const billId = Array.isArray(billData) ? billData[0]?.id : billData?.id ?? billData;
+
+    console.log("Bill ID:", billId);
+
+    if (!billId) {
+      toast.error("Bill ID nahi mila!");
+      return;
+    }
+
+    const billItemResults = await Promise.all(
+      cartItems.map((item) =>
+        baseUrl.post("BillItem", {
+          billId: billId,
+          productId: item.product.id,
+          quantity: item.quantity,
+          price: item.unitPrice,
+        })
+      )
+    );
+    console.log("BillItems added:", billItemResults.map(r => r.data));
+
+    await Promise.all(
+      cartItems.map((item) => baseUrl.delete(`CartItem/${item.id}`))
+    );
+
+    setCartItems([]);
+    toast.success("Order Placed & Bill Generated! 🎉");
+    navigate("/home");
+
+  } catch (err) {
+    console.error("Full error:", err.response?.data || err.message);
+    toast.error(`Failed: ${err.response?.data?.message || err.message}`);
+  }
+};
 
   const totalPrice = cartItems.reduce((sum, item) => sum + (item.totalPrice || 0), 0);
 
@@ -126,7 +172,7 @@ const removeItem = async (item) => {
   return (
     <div className="p-6">
       <button
-        onClick={() => navigate("/user2")}
+        onClick={() => navigate("/home")}
         className="flex w-[100px] justify-center items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 my-6 rounded-lg font-semibold shadow-md transition"
       >
         Back
@@ -138,14 +184,14 @@ const removeItem = async (item) => {
       ) : (
         <>
           {cartItems.map((item) => {
-            const product = products.find((p) => p.id === item.productId);
+            const product = products.find((p) => p.id === item.product.id);
             return (
               <div
                 key={item.id}
                 className="flex items-center gap-4 bg-white shadow p-4 rounded-xl mb-4"
               >
                 <img
-                  src={`https://myrestaurentclean.runasp.net//${product?.profile}`}
+                  src={`https://myrestaurentclean.runasp.net/${product?.profile}`}
                   className="w-24 h-24 object-cover rounded"
                   alt="product"
                   onError={(e) => (e.target.style.display = "none")}

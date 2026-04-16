@@ -10,16 +10,15 @@ export default function NavBar1() {
  
 
   const menuItems = [
-    { name: "Home", icon: "fa-solid fa-house", path: "/user2" },
-    { name: "About", icon: "fa-solid fa-house", path: "/user2" },
-    { name: "Contact", icon: "fa-solid fa-house", path: "/user2" },
-    { name: "Rate Us", icon: "fa-solid fa-house", path: "/user2" },
+    { name: "Home", icon: "fa-solid fa-house", path: "/home" },
+    { name: "About", icon: "fa-solid fa-house", path: "/home" },
+    { name: "Contact", icon: "fa-solid fa-house", path: "/home" },
+    { name: "Rate Us", icon: "fa-solid fa-house", path: "/home" },
    
   ];
 
   return (
     <>
-      {/* ===== MOBILE TOP BAR ===== */}
       <div className=" top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-white shadow-md lg:hidden">
         <div className="flex items-center gap-2">
           <img
@@ -35,8 +34,6 @@ export default function NavBar1() {
           <i className="fa-solid fa-bars text-2xl"></i>
         </button>
       </div>
-
-      {/* ===== SIDEBAR ===== */}
       <div
         className={`
           fixed lg:static top-0 left-0 z-40
@@ -46,7 +43,6 @@ export default function NavBar1() {
           lg:translate-x-0 p-5
         `}
       >
-        {/* ===== LOGO SECTION ===== */}
         <div className=" items-center gap-2">
             <div className="flex justify-center">
           <img
@@ -59,7 +55,6 @@ export default function NavBar1() {
           </span>
         </div>
 
-        {/* ===== MENU ===== */}
         <div className="mt-20 flex flex-col gap-6">
           {menuItems.map((item, index) => (
             <NavLink
@@ -82,7 +77,6 @@ export default function NavBar1() {
           ))}
         </div>
 
-        {/* ===== USER + LOGOUT ===== */}
         
       </div>
     </>

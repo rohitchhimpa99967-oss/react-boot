@@ -22,13 +22,13 @@ const VerifyOtp = () => {
 const onSubmit = async (values) => {
   try {
     const payload = {
-      username: values.email.trim(), // 👈 email input ko username bhej rahe
+      email: values.email.trim(), 
       otp: values.otp.toString().trim(),
     };
 
     console.log("VERIFY OTP PAYLOAD 👉", payload);
 
-    const response = await baseUrl.post("user login/verify-otp", payload);
+    const response = await baseUrl.post("Auth/verify-otp", payload);
 
     alert("OTP Verified Successfully ✅");
     navigate("/");
@@ -41,7 +41,6 @@ const onSubmit = async (values) => {
 
   return (
     <div className="grid grid-cols-1 h-screen md:grid-cols-2">
-      {/* LEFT IMAGE */}
       <div className="hidden md:flex items-center justify-center bg-white">
         <img
           src="/src/assets/Images/undraw_secure-login_m11a-removebg-preview (1).png"
@@ -50,7 +49,6 @@ const onSubmit = async (values) => {
         />
       </div>
 
-      {/* RIGHT FORM */}
       <div className="flex justify-center items-center flex-col px-4 bg-white">
         <div className="mb-4">
           <img

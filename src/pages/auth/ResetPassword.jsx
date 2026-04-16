@@ -54,7 +54,6 @@ const ResetPassword = () => {
       </div>
 
       <div className="bg-white flex justify-center items-center flex-col px-4">
-        {/* LOGO */}
         <div className="mb-4">
           <img
             src="/src/assets/images/Logo.png"
@@ -63,7 +62,6 @@ const ResetPassword = () => {
           />
         </div>
 
-        {/* CARD */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="p-[40px] sm:p-[50px] rounded-md bg-slate-50 w-full max-w-md"
@@ -76,7 +74,6 @@ const ResetPassword = () => {
             Reset Password
           </h1>
 
-          {/* NEW PASSWORD */}
           <div className="mb-4">
             <label className="text-lg block mb-1">Enter New Password</label>
             <input
@@ -98,7 +95,6 @@ const ResetPassword = () => {
             )}
           </div>
 
-          {/* CONFIRM PASSWORD */}
           <div className="mb-6">
             <label className="text-lg block mb-1">Confirm Password</label>
             <input
@@ -120,7 +116,6 @@ const ResetPassword = () => {
             )}
           </div>
 
-          {/* SUBMIT */}
           <Btn1 btntxt="Reset Password" width="w-full" />
         </form>
 

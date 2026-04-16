@@ -17,19 +17,10 @@ export default function Register() {
       navigate("/admin");
     }
   });
-  // const onSubmit = async(values) => {
-  //   console.log("Clicked")
-  //  try {
-  //     const response = await baseUrl.post("User/register", values);
-  //     console.log(response.data);
-  //     navigate("/");
-  //   } catch (error) {
-  //       error?.response?.data?.message || "error"
-  //   }
-  // };
+
   const onSubmit = async (values) => {
     try {
-      const response = await baseUrl.post("User/register", values);
+      const response = await baseUrl.post("User", values);
 
       navigate("/verify-otp", {
         state: { email: values.email },
@@ -41,7 +32,6 @@ export default function Register() {
 
   return (
     <div className="grid grid-cols-1 h-screen md:grid-cols-2">
-      {/* LEFT IMAGE */}
       <div className="bg-white hidden md:flex items-center justify-center">
         <img
           src="/src/assets/Images/undraw_secure-login_m11a-removebg-preview (1).png"
@@ -50,9 +40,7 @@ export default function Register() {
         />
       </div>
 
-      {/* RIGHT FORM */}
       <div className="bg-white flex justify-center items-center flex-col px-4">
-        {/* LOGO */}
         <div className="mb-4">
           <img
             src="/src/assets/images/Logo.png"
@@ -61,7 +49,6 @@ export default function Register() {
           />
         </div>
 
-        {/* CARD */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full max-w-sm p-8 rounded-md bg-slate-50"
@@ -72,43 +59,40 @@ export default function Register() {
         >
           <h1 className="text-3xl font-bold mb-6 text-center">Register</h1>
 
-          {/* FIRST NAME */}
           <div className="mb-4">
-            <label className="block text-lg mb-1">First Name</label>
+            <label className="block text-lg mb-1">Name</label>
             <input
               type="text"
-              {...register("firstName", {
+              {...register("name", {
                 required: "First name is required",
               })}
-              placeholder="Enter First Name"
+              placeholder="Enter  Name"
               className="w-full border border-black rounded-md p-2"
             />
-            {errors.firstName && (
+            {errors.name && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.firstName.message}
+                {errors.name.message}
               </p>
             )}
           </div>
 
-          {/* LAST NAME */}
           <div className="mb-4">
-            <label className="block text-lg mb-1">Last Name</label>
+            <label className="block text-lg mb-1">MObile No.</label>
             <input
               type="text"
-              {...register("lastName", {
-                required: "Last name is required",
+              {...register("mobileNo", {
+                required: "Mobile no. is required",
               })}
-              placeholder="Enter Last Name"
+              placeholder="Enter Mobile No."
               className="w-full border border-black rounded-md p-2"
             />
-            {errors.lastName && (
+            {errors.mobileNo && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.lastName.message}
+                {errors.mobileNo.message}
               </p>
             )}
           </div>
 
-          {/* EMAIL */}
           <div className="mb-4">
             <label className="block text-lg mb-1">Email</label>
             <input
@@ -130,7 +114,6 @@ export default function Register() {
             )}
           </div>
 
-          {/* PASSWORD */}
           <div className="mb-4">
             <label className="block text-lg mb-1">Password</label>
             <input
@@ -152,7 +135,6 @@ export default function Register() {
             )}
           </div>
 
-          {/* LOGIN LINK */}
           <div className="flex justify-end mb-4">
             <Link to="/">
               <span className="text-blue-600 text-sm cursor-pointer">
@@ -161,7 +143,6 @@ export default function Register() {
             </Link>
           </div>
 
-          {/* REGISTER BUTTON */}
           <button
             type="submit"
             className="w-full bg-green-500 rounded-md text-white p-2 font-semibold hover:bg-green-600 transition"
