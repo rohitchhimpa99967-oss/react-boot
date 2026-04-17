@@ -34,7 +34,9 @@ export default function Register() {
     <div className="grid grid-cols-1 h-screen md:grid-cols-2">
       <div className="bg-white hidden md:flex items-center justify-center">
         <img
-          src="/src/assets/Images/undraw_secure-login_m11a-removebg-preview (1).png"
+          // src="/src/assets/Images/undraw_secure-login_m11a-removebg-preview (1).png"
+            src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQKZD_nr9zKeU8yARdsjjnj8Sn2Y97GIGyxlM-5KeGtlYXckI5n"
+         
           alt="Register Illustration"
           className="max-w-[90%]"
         />
@@ -43,7 +45,9 @@ export default function Register() {
       <div className="bg-white flex justify-center items-center flex-col px-4">
         <div className="mb-4">
           <img
-            src="/src/assets/images/Logo.png"
+            // src="/src/assets/images/Logo.png"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcpYygu8PAVlYDukS-XCM2EOnl1DX-Qtil4NfC8DgwCr7UAD8S"
+
             alt="Logo"
             className="w-[200px] sm:w-[130px]"
           />
