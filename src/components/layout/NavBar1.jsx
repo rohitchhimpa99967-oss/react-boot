@@ -57,8 +57,9 @@ export default function NavBar1() {
       >
         <div className="flex items-center justify-center h-24 border-b">
           <img
-            src="/src/assets/images/Logo.png"
-            alt="Logo"
+            // src="/src/assets/images/Logo.png"
+             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcpYygu8PAVlYDukS-XCM2EOnl1DX-Qtil4NfC8DgwCr7UAD8S"
+                     alt="Logo"
             className="w-14 h-14"
           />
           <span className="ml-2 text-2xl font-bold text-green-600">
