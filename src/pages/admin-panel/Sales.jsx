@@ -1,66 +1,121 @@
-import React, { useState } from "react";
-import NavBar1 from "../../components/layout/NavBar1";
-import DashBoardBar1 from "../../components/layout/DashBoardBar1";
+
+import React, { useEffect, useMemo, useState } from "react";
+import { baseUrl } from "../../services/BaseUrl";
+
+const statsConfig = [
+  { key: "todaySales", title: "Today's Sales", icon: "fa-calendar-day" },
+  { key: "thisWeekSales", title: "This Week", icon: "fa-calendar-week" },
+  { key: "thisMonthSales", title: "This Month", icon: "fa-calendar" },
+  { key: "totalOrders", title: "Total Orders", icon: "fa-receipt" },
+];
+
+const formatCurrency = (value) =>
+  `₹${Number(value || 0).toLocaleString("en-IN")}`;
 
 export default function SalesPage() {
+  const [stats, setStats] = useState(statsConfig);
+  const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const salesStats = [
-    { title: "Today's Sales", value: "₹4,250", icon: "fa-calendar-day" },
-    { title: "This Week", value: "₹28,600", icon: "fa-calendar-week" },
-    { title: "This Month", value: "₹1,12,400", icon: "fa-calendar" },
-    { title: "Total Orders", value: "342", icon: "fa-receipt" },
-  ];
+  const getBillTotal = (bill) =>
+    bill.billItems?.reduce(
+      (sum, item) => sum + Number(item.total || item.price * item.quantity),
+      0
+    ) ?? 0;
 
-  const salesData = [
-    {
-      id: 1,
-      table: 12,
-      items: ["Pizza", "Coke", "Garlic Bread"],
-      amount: "₹690",
-      date: "Today",
-      status: "Paid",
-    },
-    {
-      id: 2,
-      table: 8,
-      items: ["Burger", "Fries"],
-      amount: "₹420",
-      date: "Today",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      table: 16,
-      items: ["Pasta", "Cold Coffee", "Brownie"],
-      amount: "₹1,150",
-      date: "Yesterday",
-      status: "Paid",
-    },
-  ];
+  const getDateLabel = (date) => {
+    if (!date) return "-";
 
+    const billDate = new Date(date);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (billDate.toDateString() === today.toDateString()) return "Today";
+    if (billDate.toDateString() === yesterday.toDateString())
+      return "Yesterday";
+
+    return billDate.toLocaleDateString("en-IN");
+  };
+
+  const fetchData = async () => {
+    try {
+      const [salesRes, billRes] = await Promise.all([
+        baseUrl.get("sale"),
+        baseUrl.get("Bill"),
+      ]);
+
+      const sales = salesRes.data?.data;
+      const bills = billRes.data?.data ?? [];
+
+      if (sales) {
+        const updatedStats = statsConfig.map((item) => ({
+          ...item,
+          value:
+            item.key === "totalOrders"
+              ? sales[item.key] ?? 0
+              : formatCurrency(sales[item.key]),
+        }));
+
+        setStats(updatedStats);
+      }
+
+      setOrders(
+        bills
+          .sort((a, b) => b.id - a.id)
+          .slice(0, 5)
+      );
+    } catch (error) {
+      console.error("Sales Page Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const recentOrders = useMemo(() => {
+  return orders.map((bill) => ({
+    id: bill.id,
+    table: bill.tableId ?? "N/A",
+
+    items:
+      bill.billItems?.map(
+        (item) =>
+          `${item.product?.name ?? `Item #${item.id}`} x${item.quantity}`
+      ) ?? [],
+
+    amount: formatCurrency(getBillTotal(bill)),
+    date: getDateLabel(bill.createdDate),
+    status: bill.status === 2 ? "Paid" : "Pending",
+  }));
+}, [orders]);
   return (
-    <div className="p-4 sm:p-6">
-      {/* STATS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {salesStats.map((stat, idx) => (
+    <div className="p-4 sm:p-6 space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map(({ title, icon, value }, index) => (
           <div
-            key={idx}
-            className="bg-white border border-green-100 rounded-xl p-4 shadow flex items-center gap-4"
+            key={index}
+            className="bg-white border border-green-100 rounded-xl p-4 shadow-sm flex items-center gap-4"
           >
-            <div className="w-11 h-11 flex items-center justify-center rounded-full bg-green-100 text-green-700">
-              <i className={`fa-solid ${stat.icon}`}></i>
+            <div className="w-11 h-11 rounded-full flex items-center justify-center bg-green-100 text-green-700">
+              <i className={`fa-solid ${icon}`} />
             </div>
+
             <div>
-              <p className="text-xs text-gray-500">{stat.title}</p>
-              <h3 className="text-lg font-bold text-gray-800">{stat.value}</h3>
+              <p className="text-xs text-gray-500">{title}</p>
+              <h3 className="text-lg font-bold text-gray-800">
+                {loading ? "..." : value}
+              </h3>
             </div>
           </div>
         ))}
       </div>
 
-      {/* TABLE */}
-      <div className="bg-white rounded-xl shadow border border-green-100 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-green-100 overflow-hidden">
         <div className="p-4 border-b">
           <h2 className="text-lg font-bold text-green-700">Recent Orders</h2>
         </div>
@@ -69,32 +124,39 @@ export default function SalesPage() {
           <table className="w-full text-sm">
             <thead className="bg-green-50 text-green-700">
               <tr>
-                <th className="p-3">Order</th>
-                <th className="p-3">Table</th>
-                <th className="p-3">Amount</th>
-                <th className="p-3">Date</th>
-                <th className="p-3">Status</th>
-                <th className="p-3">Action</th>
+                {["Order", "Table", "Amount", "Date", "Status", "Action"].map(
+                  (head) => (
+                    <th key={head} className="p-3 text-left">
+                      {head}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
 
             <tbody>
-              {salesData.map((sale) => (
-                <tr key={sale.id} className="border-b hover:bg-green-50">
-                  <td className="p-3 font-semibold">#{sale.id}</td>
-                  <td className="p-3">Table {sale.table}</td>
+              {recentOrders.map((order) => (
+                <tr key={order.id} className="border-b hover:bg-green-50">
+                  <td className="p-3 font-semibold">#{order.id}</td>
+                  <td className="p-3">Table {order.table}</td>
                   <td className="p-3 font-semibold text-green-700">
-                    {sale.amount}
+                    {order.amount}
                   </td>
-                  <td className="p-3">{sale.date}</td>
+                  <td className="p-3">{order.date}</td>
                   <td className="p-3">
-                    <span className="px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                      {sale.status}
+                    <span
+                      className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                        order.status === "Paid"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
+                      {order.status}
                     </span>
                   </td>
                   <td className="p-3">
                     <button
-                      onClick={() => setSelectedOrder(sale)}
+                      onClick={() => setSelectedOrder(order)}
                       className="px-3 py-1.5 text-xs rounded-md bg-green-600 text-white hover:bg-green-700"
                     >
                       View
@@ -102,35 +164,44 @@ export default function SalesPage() {
                   </td>
                 </tr>
               ))}
+
+              {!recentOrders.length && (
+                <tr>
+                  <td colSpan="6" className="p-6 text-center text-gray-400">
+                    No recent orders found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* MODAL */}
       {selectedOrder && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white w-[90%] max-w-md rounded-xl shadow-lg p-5">
-            <h3 className="text-lg font-bold text-gray-800 mb-3">
-              Order #{selectedOrder.id}
-            </h3>
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-5 space-y-4">
+            <div>
+              <h3 className="text-lg font-bold text-gray-800">
+                Order #{selectedOrder.id}
+              </h3>
+              <p className="text-sm text-gray-600">
+                Table {selectedOrder.table}
+              </p>
+            </div>
 
-            <p className="text-sm text-gray-600 mb-2">
-              Table: {selectedOrder.table}
-            </p>
-
-            <ul className="border rounded-lg divide-y mb-4">
-              {selectedOrder.items.map((item, idx) => (
-                <li key={idx} className="p-2 text-sm">
+            <ul className="border rounded-lg divide-y">
+              {selectedOrder.items.map((item, index) => (
+                <li key={index} className="p-2 text-sm">
                   🍽 {item}
                 </li>
               ))}
             </ul>
 
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span className="font-bold text-green-700">
                 {selectedOrder.amount}
               </span>
+
               <button
                 onClick={() => setSelectedOrder(null)}
                 className="px-4 py-2 text-sm rounded-md bg-gray-200 hover:bg-gray-300"
