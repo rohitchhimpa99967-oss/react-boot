@@ -177,7 +177,7 @@ export default function SalesPage() {
         </div>
       </div>
 
-      {selectedOrder && (
+             {selectedOrder && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
           <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-5 space-y-4">
             <div>
