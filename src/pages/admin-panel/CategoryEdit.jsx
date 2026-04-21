@@ -1,176 +1,4 @@
-// import React, { useEffect, useState } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
-// import { useForm } from "react-hook-form";
-// import { baseUrl } from "../../services/BaseUrl";
-// import { toast } from "react-toastify";
 
-// export default function CategoryEdit() {
-//   const [preview, setPreview] = useState(null);
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-
-//   const {
-//     register,
-//     reset,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm();
-
-//   // 🔹 Fetch category by id
-//   useEffect(() => {
-//     if (id) {
-//       getCategoryById();
-//     }
-//   }, [id]);
-
-//   const getCategoryById = async () => {
-//     try {
-//       const response = await baseUrl.get(`Category/${id}`);
-//       const data = response.data;
-
-//       // 🔹 Prefill form (IMPORTANT FIX)
-//       reset({
-//         catName: data.name,
-//         description: data.description,
-//       });
-//       console.log(data);
-
-//       // 🔹 profile preview if exists
-//       if (data.profileUrl) {
-//         setPreview(`https://apistudent2.codedonor.in${data.profileUrl}`); // backend full profile URL
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       toast.error("Failed to load category");
-//     }
-//   };
-
-//   // 🔹 profile change handler
-//   const handleFileChange = (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       setPreview(URL.createObjectURL(file));
-//     }
-//   };
-
-//   // 🔹 Submit update
-//   const onSubmit = async (data) => {
-//     try {
-//       const formData = new FormData();
-//       formData.append("id", id);
-//       formData.append("name", data.catName);
-//       formData.append("description", data.description);
-
-//       if (data.profile?.[0]) {
-//         formData.append("profile", data.profile[0]);
-//       }
-
-//       const token = localStorage.getItem("token");
-
-//       await baseUrl.put(`Category/${id}`, formData, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//           "Content-Type": "multipart/form-data",
-//         },
-//       });
-
-//       toast.success("Category Updated ✅");
-//       navigate("/category");
-//     } catch (error) {
-//       console.log(error);
-//       toast.error(error.response?.data?.title || "Update failed");
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-6xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-10 border border-green-100">
-//       <div className="flex items-center gap-6 mb-8">
-//         <button
-//           onClick={() => navigate("/category")}
-//           className="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg"
-//         >
-//           <i className="fa-solid fa-angle-left"></i> Back
-//         </button>
-//         <h1 className="text-3xl font-bold">Edit Category</h1>
-//       </div>
-
-//       <form
-//         className="grid grid-cols-1 lg:grid-cols-3 gap-8"
-//         onSubmit={handleSubmit(onSubmit)}
-//       >
-//         {/* profile */}
-//         <div>
-//           <label className="block mb-3 font-medium">Category profile</label>
-
-//           <label className="flex items-center justify-center w-full h-56 border-2 border-dashed border-green-300 rounded-xl cursor-pointer hover:bg-green-50">
-//             {preview ? (
-//               <img
-//                 src={preview}
-//                 alt="preview"
-//                 className="w-full h-full object-cover rounded-xl"
-//               />
-//             ) : (
-//               <div className="text-center text-green-600">
-//                 <i className="fa-solid fa-cloud-arrow-up text-2xl mb-2"></i>
-//                 <p>Upload profile</p>
-//                 <p className="text-xs text-gray-500">PNG / JPG</p>
-//               </div>
-//             )}
-
-//             <input
-//               type="file"
-//               className="hidden"
-//               accept="profile/*"
-//               {...register("profile")}
-//               onChange={handleFileChange}
-//             />
-//           </label>
-//         </div>
-
-//         {/* FORM */}
-//         <div className="lg:col-span-2 space-y-6">
-//           <div>
-//             <label className="block mb-2 font-medium">Category Name</label>
-//             <input
-//               type="text"
-//               {...register("catName", {
-//                 required: "Category name is required",
-//                 minLength: { value: 3, message: "Min 3 characters" },
-//               })}
-//               className="w-full border rounded-lg px-4 py-3"
-//             />
-//             {errors.catName && (
-//               <p className="text-red-500 text-sm">{errors.catName.message}</p>
-//             )}
-//           </div>
-
-//           <div>
-//             <label className="block mb-2 font-medium">Description</label>
-//             <textarea
-//               rows="4"
-//               {...register("description", {
-//                 required: "Description is required",
-//                 minLength: { value: 5, message: "Min 5 characters" },
-//               })}
-//               className="w-full border rounded-lg px-4 py-3 resize-none"
-//             />
-//             {errors.description && (
-//               <p className="text-red-500 text-sm">
-//                 {errors.description.message}
-//               </p>
-//             )}
-//           </div>
-
-//           <div className="flex justify-end pt-4">
-//             <button className="bg-green-600 hover:bg-green-700 text-white px-12 py-3 rounded-lg font-semibold">
-//               Update Category
-//             </button>
-//           </div>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -186,7 +14,7 @@ export default function CategoryEdit() {
 
   const {
     register,
-    setValue, // ✅ setValue use karenge instead of reset
+    setValue,  
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -195,8 +23,7 @@ export default function CategoryEdit() {
       description: "",
     },
   });
-
-  // 🔹 FETCH BY ID
+ 
   useEffect(() => {
     if (id) fetchCategory();
   }, [id]);
@@ -204,16 +31,16 @@ export default function CategoryEdit() {
   const fetchCategory = async () => {
     try {
       setLoading(true);
-      const res = await baseUrl.get(`Category/${id}`);
+      const res = await baseUrl.get(`category/${id}`);
       const data = res.data;
 
       console.log("API Response:", data);
 
-      // ✅ setValue se manually set karo
+   
       setValue("catName", data.data.name || "");
       setValue("description", data.data.description || "");
 
-      // ✅ Profile image set karo
+       
       if (data.data.profile) {
         setPreview(`https://myrestaurentclean.runasp.net/${data.data.profile}`);
         // setPreview(`https://apistudent2.codedonor.in${data.data.profile}`);
@@ -226,8 +53,7 @@ export default function CategoryEdit() {
       setLoading(false);
     }
   };
-
-  // 🔹 PROFILE CHANGE
+ 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -242,15 +68,14 @@ export default function CategoryEdit() {
 
       formData.append("name", data.catName);
       formData.append("description", data.description);
-
-      // ✅ Agar nayi file select hui hai to wo bhejo
+ 
       if (selectedFile) {
         formData.append("profile", selectedFile);
       }
 
       const token = localStorage.getItem("token");
 
-      await baseUrl.put(`Category/${id}`, formData, {
+      await baseUrl.put(`category/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

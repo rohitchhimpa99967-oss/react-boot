@@ -9,7 +9,7 @@ export default function AdminPage1() {
 
   const getDashBoard = async () => {
     try {
-      const res = await baseUrl.get("Dashboard");
+      const res = await baseUrl.get("dashboard");
       setDashboard(res.data.data);
     } catch (error) {
       console.log(error);

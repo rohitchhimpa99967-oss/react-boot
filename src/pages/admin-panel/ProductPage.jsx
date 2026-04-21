@@ -1,138 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { baseUrl } from "../../services/BaseUrl";
-// import EditButton from "../../components/buttons/EditButton";
-// import DeleteButton from "../../components/buttons/DeleteButton";
-// import { toast } from "react-toastify";
-
-// export default function ProductPage() {
-//   const navigate = useNavigate();
-
-//   const [categories, setCategories] = useState([]);
-//   const [products, setProducts] = useState([]);
-//   const [selectedCategory, setSelectedCategory] = useState(null);
-
-//   const cateGet = async () => {
-//     try {
-//       const res = await baseUrl.get("Category");
-//       setCategories(res.data);
-
-//       if (res.data.length > 0) {
-//         setSelectedCategory(res.data[0].id);
-//       }
-//     } catch (err) {
-//       console.log(err.response);
-//     }
-//   };
-//   const onDelete = async (id) => {
-//     try {
-//       const response = await baseUrl.delete(`Product/${id}`);
-//       console.log(response.data);
-//       setProducts((prev) => prev.filter((prod) => prod.id !== id));
-//       toast.success("Product Deleted");
-//     } catch (error) {
-//       console.log(error.response?.data);
-//       toast.error(error.response?.data?.message || "Delete failed");
-//     }
-//   };
-//   const productGet = async () => {
-//     try {
-//       const res = await baseUrl.get("Product");
-//       setProducts(res.data);
-//     } catch (err) {
-//       console.log(err.response);
-//     }
-//   };
-
-//   useEffect(() => {
-//     cateGet();
-//     productGet();
-//   }, []);
-
-//   return (
-//     <div className="p-5 max-w-full">
-//       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-//         <h1 className="text-2xl font-bold text-gray-800">Products</h1>
-
-//         <button
-//           onClick={() => navigate("/products/add")}
-//           className="flex w-[170px] items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold shadow-md transition"
-//         >
-//           <i className="fa-solid fa-plus"></i>
-//           Add Product
-//         </button>
-//       </div>
-
-//       {categories.length <= 4 ? (
-//         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-//           {categories.map((cat) => (
-//             <div
-//               key={cat.id}
-//               onClick={() => setSelectedCategory(cat.id)}
-//               className={`flex flex-col items-center p-4 rounded-xl cursor-pointer border transition
-//                 ${
-//                   selectedCategory === cat.id
-//                     ? "bg-green-500 text-white border-green-500"
-//                     : "bg-white border-green-200 hover:bg-green-100"
-//                 }`}
-//             >
-//               <i className="fa-solid fa-box text-2xl mb-1"></i>
-//               <span className="font-semibold">{cat.name}</span>
-//             </div>
-//           ))}
-//         </div>
-//       ) : (
-//         <div className="mb-8 w-full overflow-x-auto">
-//           <div className="flex gap-4 min-w-max px-2">
-//             {categories.map((cat) => (
-//               <div
-//                 key={cat.id}
-//                 onClick={() => setSelectedCategory(cat.id)}
-//                 className={`min-w-[120px] flex-shrink-0 flex flex-col items-center p-4 rounded-xl cursor-pointer border transition
-//                   ${
-//                     selectedCategory === cat.id
-//                       ? "bg-green-500 text-white border-green-500"
-//                       : "bg-white border-green-200 hover:bg-green-100"
-//                   }`}
-//               >
-//                 <i className="fa-solid fa-box text-2xl mb-1"></i>
-//                 <span className="font-semibold">{cat.name}</span>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       )}
-
-//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-//         {products
-//           .filter((p) => !selectedCategory || p.categoryId === selectedCategory)
-//           .map((prod) => (
-//             <div
-//               key={prod.id}
-//               className="flex flex-col items-center p-4 rounded-2xl bg-white shadow-md"
-//             >
-//               <div className="w-full aspect-square rounded-lg overflow-hidden">
-//                 <img
-//                   src={`https://apistudent2.codedonor.in${prod.profile}`}
-//                   alt={prod.name}
-//                   className="w-full h-full object-cover"
-//                 />
-//               </div>
-
-//               <h2 className="mt-3 font-semibold text-lg text-center">
-//                 {prod.name}
-//               </h2>
-
-//               <div className="flex md:flex-col xl:flex-row gap-2 mt-3">
-//                 <EditButton onClick={()=>navigate(`edit/${prod.id}`)} />
-//                 <DeleteButton onClick={()=>onDelete(prod.id)} />
-//               </div>
-//             </div>
-//           ))}
-//       </div>
-//     </div>
-//   );
-// }
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -149,11 +14,10 @@ export default function ProductPage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Fetch Categories
   const cateGet = async () => {
     try {
-      const res = await baseUrl.get("Category");
-      setCategories(res.data.data); // ✅ Fixed: .dats -> .data
+      const res = await baseUrl.get("category");
+      setCategories(res.data.data); 
 
       if (res.data.data.length > 0) {
         setSelectedCategory(res.data.data[0].id);
@@ -164,11 +28,10 @@ export default function ProductPage() {
     }
   };
 
-  // 🔹 Fetch Products
   const productGet = async () => {
     try {
       setLoading(true);
-      const res = await baseUrl.get("Product");
+      const res = await baseUrl.get("product");
       setProducts(res.data.data);
       console.log(res.data.data)
       setLoading(false);
@@ -179,12 +42,11 @@ export default function ProductPage() {
     }
   };
 
-  // 🔹 Delete Product
   const onDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
 
-      await baseUrl.delete(`Product/${id}`, {
+      await baseUrl.delete(`product/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -203,13 +65,11 @@ export default function ProductPage() {
     productGet();
   }, []);
 
-  // 🔹 Filtered Products
   const filteredProducts = products.filter(
     (p) => !selectedCategory || p.category.id === selectedCategory,
   );
   return (
     <div className="p-5 max-w-full">
-      {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <h1 className="text-2xl font-bold text-gray-800">Products</h1>
 
@@ -222,7 +82,6 @@ export default function ProductPage() {
         </button>
       </div>
 
-      {/* CATEGORY FILTERS */}
       {categories.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           No categories found. Please add categories first.
@@ -242,7 +101,6 @@ export default function ProductPage() {
             >
               {cat.profile ? (
                 <img
-                  // src={`https://apistudent2.codedonor.in${cat.profile}`}
                   src={`https://myrestaurentclean.runasp.net//${cat.profile}`}
                   alt={cat.name}
                   className="w-12 h-12 object-cover rounded-full mb-2"
@@ -270,7 +128,6 @@ export default function ProductPage() {
               >
                 {cat.profile ? (
                   <img
-                    // src={`https://apistudent2.codedonor.in${cat.profile}`}
                     src={`https://myrestaurentclean.runasp.net//${cat.profile}`}
                     alt={cat.name}
                     className="w-12 h-12 object-cover rounded-full mb-2"
@@ -287,7 +144,6 @@ export default function ProductPage() {
         </div>
       )}
 
-      {/* LOADING STATE */}
       {loading ? (
         <div className="text-center py-16">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent"></div>
@@ -310,11 +166,10 @@ export default function ProductPage() {
               key={prod.id}
               className="flex flex-col p-4 rounded-2xl bg-white shadow-md hover:shadow-xl transition-shadow"
             >
-              {/* PRODUCT IMAGE */}
               <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
                 {prod.profile ? (
                   <img
-                    // src={`https://apistudent2.codedonor.in${prod.profile}`}
+                    
                     src={`https://myrestaurentclean.runasp.net//${prod.profile}`}
                     alt={prod.name}
                     className="w-full h-full object-cover"
@@ -322,10 +177,6 @@ export default function ProductPage() {
                       e.target.src =
                         "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect width='300' height='300' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23d1d5db' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E";
                     }}
-                    // onError={(e) => {
-                    //   e.target.src =
-                    //     "https://via.placeholder.com/300?text=No+Image";
-                    // }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
@@ -334,7 +185,6 @@ export default function ProductPage() {
                 )}
               </div>
 
-              {/* PRODUCT INFO */}
               <div className="flex-1 mt-3">
                 <h2 className="font-semibold text-lg text-gray-800 line-clamp-2">
                   {prod.name}
@@ -347,7 +197,6 @@ export default function ProductPage() {
                 </p>
               </div>
 
-              {/* ACTION BUTTONS */}
               <div className="flex gap-2 mt-4">
                 <EditButton
                   onClick={() => navigate(`/products/edit/${prod.id}`)}

@@ -28,7 +28,7 @@ const onSubmit = async (values) => {
 
     console.log("VERIFY OTP PAYLOAD 👉", payload);
 
-    const response = await baseUrl.post("Auth/verify-otp", payload);
+    const response = await baseUrl.post("auth/verify-otp", payload);
 
     alert("OTP Verified Successfully ✅");
     navigate("/");

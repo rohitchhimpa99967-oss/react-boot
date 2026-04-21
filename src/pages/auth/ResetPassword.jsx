@@ -33,7 +33,7 @@ const ResetPassword = () => {
   const onSubmit = async (data) => {
     data.email = userEmail;
     try {
-      const response = baseUrl.post("/Auth/reset-password", data);
+      const response = baseUrl.post("auth/reset-password", data);
       if (response) {
         console.log(response);
         navigate("/");

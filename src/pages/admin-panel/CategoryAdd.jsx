@@ -32,13 +32,13 @@ export default function CategoryAdd() {
       const formData = new FormData();
 
       if (image) {
-        formData.append("Profile", image); // 🔥 Swagger key
+        formData.append("Profile", image); 
       }
 
       const token = localStorage.getItem("token");
 
       const response = await baseUrl.post(
-        `Category?Name=${data.catName}&Description=${data.description}`,
+        `category?Name=${data.catName}&Description=${data.description}`,
         formData,
         {
           headers: {

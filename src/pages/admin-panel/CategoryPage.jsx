@@ -13,7 +13,7 @@ export default function CategoryPage() {
 
   const onDelete = async (id) => {
     try {
-      const response = await baseUrl.delete(`Category/${id}`);
+      const response = await baseUrl.delete(`category/${id}`);
       console.log(response.data);
       setCategories((prev) => prev.filter((cat) => cat.id !== id));
 
@@ -25,7 +25,7 @@ export default function CategoryPage() {
   };
 
   const getCategories = async () => {
-    const response = await baseUrl.get("Category");
+    const response = await baseUrl.get("category");
     console.log(response)
     setCategories(response.data.data);
   };

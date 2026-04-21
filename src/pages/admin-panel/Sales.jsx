@@ -43,7 +43,7 @@ export default function SalesPage() {
     try {
       const [salesRes, billRes] = await Promise.all([
         baseUrl.get("sale"),
-        baseUrl.get("Bill"),
+        baseUrl.get("bill"),
       ]);
 
       const sales = salesRes.data?.data;

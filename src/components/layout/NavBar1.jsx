@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useUserDetail } from "../../pages/hooks/useUserDetail";
+import { path } from "framer-motion/client";
 
 export default function NavBar1() {
   const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function NavBar1() {
     { name: "Sales", icon: "fa-solid fa-receipt", path: "/sales" },
     { name: "Bill", icon: "fa-solid fa-receipt", path: "/bill" },
     { name: "Tables", icon: "fa-solid fa-table", path: "/tables" },
+    {name:"Staff",icon: "fa-solid fa-list",path:"/staff"}
   ];
 
   return (
@@ -103,7 +105,6 @@ export default function NavBar1() {
               <p className="font-semibold text-gray-800 text-sm break-all">
                 {decode?.["username"]}
               </p>
-              {/* <p className="text-sm text-green-600">{decode?.["Email"]}</p> */}
             </div>
           </div>
 

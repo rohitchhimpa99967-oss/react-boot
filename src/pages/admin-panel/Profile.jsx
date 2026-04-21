@@ -11,7 +11,7 @@ export default function ProfilePage() {
 
   const getUserByEmail = async (email) => {
     try {
-      const res = await baseUrl.get("User");
+      const res = await baseUrl.get("user");
       const allUsers = res.data.data;
 
       const matchedUser = allUsers.find(
@@ -31,9 +31,6 @@ export default function ProfilePage() {
 
     const email =
       decode?.["username"] ||
-      decode[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-      ] ||
       decode.sub;
 
     if (email) getUserByEmail(email);
@@ -54,24 +51,6 @@ export default function ProfilePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          <div className="md:col-span-2 flex items-center gap-6">
-            <img
-              src={image}
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover border-2 border-green-500"
-            />
-
-            {/* <label className="cursor-pointer bg-green-100 text-green-700 px-4 py-2 rounded-lg font-medium hover:bg-green-200 transition">
-              Change Photo
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageChange}
-              />
-            </label> */}
-          </div>
-
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Full Name

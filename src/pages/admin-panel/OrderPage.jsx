@@ -15,7 +15,7 @@ export default function OrderPage() {
 
   const getOrders = async () => {
     try {
-      const response = await baseUrl.get("Order");
+      const response = await baseUrl.get("order");
       setOrders(response.data.data);
     } catch (error) {
       console.log(error);
@@ -26,7 +26,7 @@ export default function OrderPage() {
   };
    const productGet = async () => {
     try {
-      const res = await baseUrl.get("Product");
+      const res = await baseUrl.get("product");
       var result=res.data.data;
       setProducts(result);
       console.log(result)
@@ -58,7 +58,7 @@ export default function OrderPage() {
 
 const updateStatus = async (orderId, newStatus) => {
   try {
-    await baseUrl.put(`Order/${orderId}`, {
+    await baseUrl.put(`order/${orderId}`, {
       id: orderId,
       status: newStatus,
     });
@@ -111,7 +111,7 @@ console.log("Filtered Orders:", filteredOrders);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      {/* ── Heading ── */}
+    
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold text-green-700">
           🍽️ Kitchen Orders

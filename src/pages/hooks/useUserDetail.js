@@ -9,12 +9,13 @@ export const useUserDetail = () => {
             const decoded = jwtDecode(token);
             console.log(decoded)
             setDecode(decoded);
+           
         } else {
             setDecode(null);
         }
 
 
     }, [])
-
-    return { decode };
+ const role = Number(decode?.role);
+    return { decode,role };
 }

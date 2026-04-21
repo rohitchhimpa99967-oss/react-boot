@@ -14,7 +14,7 @@ const UserCart = () => {
 
   const getCartItems = async () => {
     try {
-      const response = await baseUrl.get("Cart");
+      const response = await baseUrl.get("cart");
       const carts = response.data.data;
 
       if (carts && carts.length > 0) {
@@ -30,7 +30,7 @@ const UserCart = () => {
 
   const productGet = async () => {
     try {
-      const res = await baseUrl.get("Product");
+      const res = await baseUrl.get("product");
       setProducts(res.data.data);
       console.log(products)
     } catch (err) {
@@ -56,7 +56,7 @@ const updateQty = async (item, type) => {
       unitPrice: item.unitPrice,
     });
 
-    const res = await baseUrl.put(`CartItem/${item.id}`, {
+    const res = await baseUrl.put(`cart-item/${item.id}`, {
       cartId: item.cartId,
       productId: item.product.id,
       quantity: newQty,
@@ -74,7 +74,7 @@ const updateQty = async (item, type) => {
 const removeItem = async (item) => {
   try {
     console.log("Deleting CartItem:", item.id);
-    const res = await baseUrl.delete(`CartItem/${item.id}`);
+    const res = await baseUrl.delete(`cart-item/${item.id}`);
     console.log("Delete response:", res.data);
     await getCartItems();
     toast.success("Item removed");
@@ -90,7 +90,7 @@ const removeItem = async (item) => {
       return;
     }
 
-    const orderResponse = await baseUrl.post("Order", {
+    const orderResponse = await baseUrl.post("order", {
       tableId: 1,
       note: "",
     });
@@ -119,7 +119,7 @@ const removeItem = async (item) => {
     );
     console.log("OrderItems added:", orderItemResults.map(r => r.data));
 
-    const billResponse = await baseUrl.post("Bill", {
+    const billResponse = await baseUrl.post("bill", {
       tableId: 1,
       note: "",
     });
@@ -138,7 +138,7 @@ const removeItem = async (item) => {
 
     const billItemResults = await Promise.all(
       cartItems.map((item) =>
-        baseUrl.post("BillItem", {
+        baseUrl.post("bill-item", {
           billId: billId,
           productId: item.product.id,
           quantity: item.quantity,
@@ -149,7 +149,7 @@ const removeItem = async (item) => {
     console.log("BillItems added:", billItemResults.map(r => r.data));
 
     await Promise.all(
-      cartItems.map((item) => baseUrl.delete(`CartItem/${item.id}`))
+      cartItems.map((item) => baseUrl.delete(`cart-item/${item.id}`))
     );
 
     setCartItems([]);

@@ -24,6 +24,8 @@ import TableAdd from "./pages/admin-panel/TableAdd";
 import ProductEdit from "./pages/admin-panel/ProductEdit";
 import CategoryEdit from "./pages/admin-panel/CategoryEdit";
 import VerifyOtp from "./pages/auth/VerifyOtp";
+import CreateAdmin from "./pages/admin-panel/CreateAdmin";
+import StaffPage from "./pages/admin-panel/StaffPage";
 
 const AuthGuard = () => {
   const token = localStorage.getItem("token");
@@ -34,7 +36,7 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Password />} />
-      <Route path="/registeruser" element={<RegisterUser />} />
+      {/* <Route path="/registeruser" element={<RegisterUser />} /> */}
       <Route path="/forgetpassword" element={<Forgotpass />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-otp" element={<VerifyOtp />} />
@@ -49,6 +51,7 @@ const AppRouter = () => {
         <Route element={<Layout />}>
           <Route path="/admin" element={<AdminPage1 />} />
           <Route path="/l" element={<LandingPage />} />
+          <Route path="/create-user" element={<CreateAdmin/>}/>
 
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/category/add" element={<CategoryAdd />} />
@@ -61,6 +64,7 @@ const AppRouter = () => {
           <Route path="/orders" element={<OrderPage />} />
 
           <Route path="/sales" element={<SalesPage />} />
+          <Route path="/staff" element={<StaffPage />} />
 
           <Route path="/bill" element={<Bill />} />
           <Route path="/tables" element={<TablePage />} />

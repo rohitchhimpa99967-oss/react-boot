@@ -20,7 +20,7 @@ export default function Register() {
 
   const onSubmit = async (values) => {
     try {
-      const response = await baseUrl.post("User", values);
+      const response = await baseUrl.post("user", values);
 
       navigate("/verify-otp", {
         state: { email: values.email },

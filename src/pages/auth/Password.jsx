@@ -24,10 +24,14 @@ const Password = () => {
 
   const onSubmit = async (values) => {
     try {
-      const response = await baseUrl.post("Auth/login", values);
+      const response = await baseUrl.post("auth/login", values);
       console.log(response.data.data);
-      localStorage.setItem("token", response?.data?.data);
+      const token =response?.data?.data.token;
+   
+     localStorage.setItem("token", response?.data?.data);
+      localStorage.setItem("role", res.data.data.role);
       navigate("/");
+     
     } catch (error) {
       setLoginError(
         error?.response?.data?.message || "Invalid email or password",
@@ -118,11 +122,7 @@ const Password = () => {
                   Forgot Password
                 </span>
               </Link>
-              <Link to="/registeruser">
-                <span className="text-blue-600 ml-2 text-sm cursor-pointer">
-                  Sign Up
-                </span>
-              </Link>
+              
             </div>
           </div>
           <div>

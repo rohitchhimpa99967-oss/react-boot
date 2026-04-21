@@ -19,7 +19,7 @@ const UserHome = () => {
 
   const getCategories = async () => {
     try {
-      const res = await baseUrl.get("Category");
+      const res = await baseUrl.get("category");
       setCategories(res.data.data);
       if (res.data.data.length > 0) {
         setSelectedCategory(res.data.data[0].id);
@@ -31,7 +31,7 @@ const UserHome = () => {
 
   const productGet = async () => {
     try {
-      const res = await baseUrl.get("Product");
+      const res = await baseUrl.get("product");
       const result=res.data.data;
       setProducts(result)
       console.log(result)
@@ -45,7 +45,7 @@ const UserHome = () => {
 
 const getCartItems = async () => {
   try {
-    const res = await baseUrl.get("Cart");
+    const res = await baseUrl.get("cart");
     setCart(res.data.data);
   } catch (err) {
     console.log(err);
@@ -55,14 +55,14 @@ const getCartItems = async () => {
 
 const getOrCreateCart = async () => {
   try {
-    const res = await baseUrl.get("Cart");
+    const res = await baseUrl.get("cart");
     const carts = res.data.data;
 
     if (carts && carts.length > 0) {
       return carts[0].id; 
     }
 
-    const createRes = await baseUrl.post("Cart", {
+    const createRes = await baseUrl.post("cart", {
       tableId: 1,
       note: ""
     });
@@ -86,7 +86,7 @@ const cartAdd = async (prod) => {
     );
 
     if (existing) {
-      await baseUrl.put(`CartItem/${existing.id}`, {
+      await baseUrl.put(`cart-item/${existing.id}`, {
         cartId: existing.cartId,
         productId: existing.product.id,
         quantity: existing.quantity + 1,
@@ -94,7 +94,7 @@ const cartAdd = async (prod) => {
       });
       toast.success("Quantity Updated ✅");
     } else {
-      await baseUrl.post("CartItem", {
+      await baseUrl.post("cart-item", {
         cartId: currentCartId,
         productId: prod.id,
         quantity: 1,

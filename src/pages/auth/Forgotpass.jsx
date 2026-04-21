@@ -27,7 +27,7 @@ const Forgotpass = () => {
   const handleGetOtp = async (data) => {
     try {
      
-      const response = await baseUrl.post("Auth/forgot-password", {
+      const response = await baseUrl.post("auth/forgot", {
         email: data.email,
       });
       console.log("OTP sent to:", data.email);
@@ -41,7 +41,7 @@ const Forgotpass = () => {
   const handleSubmitOtp = async (data) => {
     try {
       
-      const response = await baseUrl.post("Auth/verify-otp", {
+      const response = await baseUrl.post("auth/verify-otp", {
         otp: data.otp,
         email: data.email,
       });

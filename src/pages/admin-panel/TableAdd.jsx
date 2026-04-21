@@ -16,7 +16,7 @@ const TableAdd = () => {
 
   const onSubmit = async (data) => {
     try {
-      await baseUrl.post("Table", data);
+      await baseUrl.post("table", data);
       toast.success("Table added successfully ✅");
       navigate("/tables");
     } catch (err) {
@@ -65,42 +65,6 @@ const TableAdd = () => {
         </p>
       )}
     </div>
-{/* 
-    <div>
-      <label className="block mb-2 font-medium text-gray-700">
-        Seating Capacity
-      </label>
-      <div className="relative">
-        <i className="fa-solid fa-users absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-        <input
-          type="number"
-          placeholder="e.g. 4"
-          {...register("capacity", {
-            required: "Capacity is required",
-            min: { value: 1, message: "Minimum 1 seat required" },
-          })}
-          className="w-full border border-gray-300 rounded-lg px-10 py-3 focus:ring-2 focus:ring-green-500 outline-none"
-        />
-      </div>
-      {errors.capacity && (
-        <p className="text-red-500 text-sm mt-1">
-          {errors.capacity.message}
-        </p>
-      )}
-    </div> */}
-
-    {/* <div className="flex items-center gap-3">
-      <input
-        type="checkbox"
-        defaultChecked
-        {...register("isAvailable")}
-        className="w-5 h-5 accent-green-600"
-      />
-      <label className="font-medium text-gray-700">
-        Table Available
-      </label>
-    </div> */}
-
     <div className="flex justify-end pt-4">
       <button
         type="submit"

@@ -11,6 +11,7 @@ const titleMap = {
   "/products/add": "Products",
   "/orders": "Orders",
   "/sales": "Sales",
+  "/staff":"Staff",
   "/bill": "Bills",
   "/tables": "Tables",
   "/tables/add": "Tables",

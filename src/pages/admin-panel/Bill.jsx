@@ -11,7 +11,7 @@ export default function Bill() {
 
   const getBills = async () => {
     try {
-      const res = await baseUrl.get("Bill");
+      const res = await baseUrl.get("bill");
       setBills(res.data.data);
     } catch (err) {
       console.log(err);
@@ -37,7 +37,7 @@ export default function Bill() {
 
   const updateStatus = async (billId, newStatus) => {
     try {
-      await baseUrl.put(`Bill/${billId}`, {
+      await baseUrl.put(`bill/${billId}`, {
         id: billId,
         status: newStatus,
       });
