@@ -23,7 +23,8 @@ export default function NavBar1() {
   { value: "3", label: "Server" },
   { value: "4", label: "Receptionist" },
 ];
-
+ const roleName =
+    ROLES.find((item) => item.value === decode?.["role"])?.label || "";
   const menuItems = [
     { name: "Home", icon: "fa-solid fa-house", path: "/admin" },
     { name: "Category", icon: "fa-solid fa-list", path: "/category" },
@@ -109,7 +110,7 @@ export default function NavBar1() {
             />
             <div>
               <p className="font-semibold text-gray-800 text-sm break-all">
-              {ROLES.value==decode?.["role"]}  
+              {roleName}  
               </p>
               <p className="font-semibold text-gray-800 text-sm break-all">
                 {decode?.["username"]}
