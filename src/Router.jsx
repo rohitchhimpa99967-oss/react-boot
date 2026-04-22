@@ -26,6 +26,7 @@ import CategoryEdit from "./pages/admin-panel/CategoryEdit";
 import VerifyOtp from "./pages/auth/VerifyOtp";
 import CreateAdmin from "./pages/admin-panel/CreateAdmin";
 import StaffPage from "./pages/admin-panel/StaffPage";
+import ChangePassword from "./pages/admin-panel/ChangePassword";
 
 const AuthGuard = () => {
   const token = localStorage.getItem("token");
@@ -65,6 +66,8 @@ const AppRouter = () => {
 
           <Route path="/sales" element={<SalesPage />} />
           <Route path="/staff" element={<StaffPage />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+
 
           <Route path="/bill" element={<Bill />} />
           <Route path="/tables" element={<TablePage />} />

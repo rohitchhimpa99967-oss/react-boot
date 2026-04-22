@@ -89,13 +89,14 @@ export default function StaffPage() {
       ) : (
         <div className="bg-white rounded-2xl shadow-md overflow-hidden">
    
-          <div className="hidden sm:grid grid-cols-5 bg-green-50 text-green-700 font-semibold text-sm px-6 py-3 border-b border-green-100">
+          <div className="hidden sm:grid grid-cols-6 bg-green-50 text-green-700 font-semibold text-sm px-6 py-3 border-b border-green-100">
             <span>#</span>
             <span>Name</span>
             <span>Email</span>
             <span>Mobile</span>
             <span>Job</span>
-            {isAdmin && <span></span>}
+
+            {isAdmin && <span>Action</span>}
           </div>
 
      
@@ -141,7 +142,7 @@ export default function StaffPage() {
               </span>
              
               {isAdmin && (
-                <div className="flex justify-end">
+                <div className="flex justify-start">
                   <DeleteButton onClick={() => onDelete(member.id)} />
                 </div>
               )}

@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { baseUrl } from "../../services/BaseUrl";
 import { useUserDetail } from "../hooks/useUserDetail";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const { decode } = useUserDetail();
   const [user, setUser] = useState(null);
   const [image, setImage] = useState("/src/assets/images/photo1.jpg");
+  const navigate= useNavigate();
 
   const getUserByEmail = async (email) => {
     try {
@@ -47,6 +49,7 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-md p-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-800">My Profile</h1>
+          <button onClick={()=>navigate("/change-password")} className="bg-green-600 text-white px-12 py-3 rounded-lg hover:bg-green-700 transition font-medium">Change Password</button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

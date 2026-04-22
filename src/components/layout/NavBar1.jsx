@@ -17,6 +17,12 @@ export default function NavBar1() {
     navigate("/profile");
     setOpen(false);
   };
+  const ROLES = [
+  { value: "1", label: "Admin" },
+  { value: "2", label: "Chef" },
+  { value: "3", label: "Server" },
+  { value: "4", label: "Receptionist" },
+];
 
   const menuItems = [
     { name: "Home", icon: "fa-solid fa-house", path: "/admin" },
@@ -102,6 +108,9 @@ export default function NavBar1() {
               className="w-10 h-10 rounded-full object-cover border border-green-300"
             />
             <div>
+              <p className="font-semibold text-gray-800 text-sm break-all">
+              {ROLES.value==decode?.["role"]}  
+              </p>
               <p className="font-semibold text-gray-800 text-sm break-all">
                 {decode?.["username"]}
               </p>

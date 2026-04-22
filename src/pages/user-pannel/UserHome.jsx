@@ -13,9 +13,7 @@ const UserHome = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  
   const productRefs = useRef({});
-
 
   const getCategories = async () => {
     try {
@@ -32,83 +30,104 @@ const UserHome = () => {
   const productGet = async () => {
     try {
       const res = await baseUrl.get("product");
-      const result=res.data.data;
-      setProducts(result)
-      console.log(result)
-     
+      const result = res.data.data;
+      setProducts(result);
+      console.log(result);
     } catch (err) {
       console.log(err.response);
     }
   };
 
-
-
-const getCartItems = async () => {
-  try {
-    const res = await baseUrl.get("cart");
-    setCart(res.data.data);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-
-const getOrCreateCart = async () => {
-  try {
-    const res = await baseUrl.get("cart");
-    const carts = res.data.data;
-
-    if (carts && carts.length > 0) {
-      return carts[0].id; 
+  const getCartItems = async () => {
+    try {
+      const res = await baseUrl.get("cart");
+      setCart(res.data.data);
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    const createRes = await baseUrl.post("cart", {
-      tableId: 1,
-      note: ""
-    });
-    return createRes.data.data.id; 
-  } catch (err) {
-    console.error(err);
-    toast.error("Cart error");
-    return null;
-  }
-};
+  const getOrCreateCart = async () => {
+    try {
+      const res = await baseUrl.get("cart");
+      const carts = res.data.data;
 
-const cartAdd = async (prod) => {
-  try {
-    const currentCartId = await getOrCreateCart();
-    if (!currentCartId) return;
+      if (carts && carts.length > 0) {
+        return carts[0].id;
+      }
 
-    const items = cart[0]?.items ?? [];
-
-    const existing = items.find(
-      (i) => i.product?.id === prod.id && i.cartId === currentCartId
-    );
-
-    if (existing) {
-      await baseUrl.put(`cart-item/${existing.id}`, {
-        cartId: existing.cartId,
-        productId: existing.product.id,
-        quantity: existing.quantity + 1,
-        unitPrice: prod.price,
+      const createRes = await baseUrl.post("cart", {
+        tableId: 1,
+        note: "",
       });
-      toast.success("Quantity Updated ✅");
-    } else {
-      await baseUrl.post("cart-item", {
-        cartId: currentCartId,
-        productId: prod.id,
-        quantity: 1,
-        unitPrice: prod.price,
-      });
-      toast.success("Added to Cart 🛒");
+
+      return createRes.data.data.id;
+    } catch (err) {
+      console.error(err);
+      toast.error("Cart error");
+      return null;
     }
+  };
 
-    await getCartItems();
-  } catch (err) {
-    console.error(err);
-    toast.error("Something went wrong");
-  }
-};
+  const cartAdd = async (prod) => {
+    try {
+      const currentCartId = await getOrCreateCart();
+      if (!currentCartId) return;
+
+      const items = cart[0]?.items ?? [];
+
+      const existing = items.find(
+        (i) => i.product?.id === prod.id && i.cartId === currentCartId
+      );
+
+      if (existing) {
+        await baseUrl.put(`cart-item/${existing.id}`, {
+          cartId: existing.cartId,
+          productId: existing.product.id,
+          quantity: existing.quantity + 1,
+          unitPrice: prod.price,
+        });
+        toast.success("Quantity Updated ✅");
+      } else {
+        await baseUrl.post("cart-item", {
+          cartId: currentCartId,
+          productId: prod.id,
+          quantity: 1,
+          unitPrice: prod.price,
+        });
+        toast.success("Added to Cart 🛒");
+      }
+
+      await getCartItems();
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const updateQty = async (item, type) => {
+    try {
+      const newQty =
+        type === "inc" ? item.quantity + 1 : item.quantity - 1;
+
+      if (newQty < 1) {
+        await baseUrl.delete(`cart-item/${item.id}`);
+      } else {
+        await baseUrl.put(`cart-item/${item.id}`, {
+          cartId: item.cartId,
+          productId: item.product.id,
+          quantity: newQty,
+          unitPrice: item.unitPrice,
+        });
+      }
+
+      await getCartItems();
+    } catch (err) {
+      console.log(err);
+      toast.error("Failed");
+    }
+  };
+
   useEffect(() => {
     getCategories();
     productGet();
@@ -127,7 +146,10 @@ const cartAdd = async (prod) => {
       if (ref) {
         ref.scrollIntoView({ behavior: "smooth", block: "center" });
         ref.classList.add("ring-4", "ring-green-400");
-        setTimeout(() => ref.classList.remove("ring-4", "ring-green-400"), 2000);
+        setTimeout(
+          () => ref.classList.remove("ring-4", "ring-green-400"),
+          2000
+        );
       }
     }, 100);
   };
@@ -138,7 +160,6 @@ const cartAdd = async (prod) => {
 
   return (
     <div className="flex flex-col flex-1 gap-10 p-4 ms-4">
-      
       <div className="w-full h-52 sm:h-72 rounded-xl overflow-hidden group">
         <img
           src="../src/assets/images/Userdemo-home.avif"
@@ -148,7 +169,6 @@ const cartAdd = async (prod) => {
       </div>
 
       <div className="flex sm:flex-row justify-between items-center gap-6">
-        
         <div className="relative">
           <div className="flex items-center gap-2 border-b-2 pb-1">
             <i className="fa-solid fa-magnifying-glass text-gray-500"></i>
@@ -170,7 +190,6 @@ const cartAdd = async (prod) => {
                   className="flex items-center gap-3 px-4 py-2 hover:bg-green-50 cursor-pointer transition"
                 >
                   <img
-                    // src={`https://apistudent2.codedonor.in${prod.profile}`}
                     src={`https://myrestaurentclean.runasp.net//${prod.profile}`}
                     className="w-10 h-10 rounded-lg object-cover"
                     onError={(e) => (e.target.style.display = "none")}
@@ -209,9 +228,10 @@ const cartAdd = async (prod) => {
               cursor-pointer bg-white
               hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.25)]
               transition-all duration-500
-              ${selectedCategory === cat.id
-                ? "bg-green-500 text-white border-green-500"
-                : "bg-white border-green-200 hover:bg-green-100"
+              ${
+                selectedCategory === cat.id
+                  ? "bg-green-500 text-white border-green-500"
+                  : "bg-white border-green-200 hover:bg-green-100"
               }`}
           >
             <div className="overflow-hidden">
@@ -234,35 +254,71 @@ const cartAdd = async (prod) => {
         </h1>
 
         <div className="flex flex-wrap justify-center gap-6">
-          {filteredProducts.map((prod) => (
-            <div
-              key={prod.id}
-              ref={(el) => (productRefs.current[prod.id] = el)}
-              className="w-[280px] sm:w-[300px] border rounded-xl text-center p-2 overflow-hidden group
+          {filteredProducts.map((prod) => {
+            const cartItem =
+              cart[0]?.items?.find((i) => i.product?.id === prod.id) || null;
+
+            return (
+              <div
+                key={prod.id}
+                ref={(el) => (productRefs.current[prod.id] = el)}
+                className="w-[280px] sm:w-[300px] border rounded-xl text-center p-2 overflow-hidden group
                 cursor-pointer hover:-translate-y-4 hover:shadow-[0_25px_60px_rgba(0,0,0,0.35)]
                 transition-all duration-500 bg-white"
-            >
-              <div className="overflow-hidden rounded-t-xl">
-                <img
-                  src={`https://myrestaurentclean.runasp.net//${prod.profile}`}
-                  alt={prod.name}
-                  className="w-full h-[160px] object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-              <h1 className="mt-3 font-bold text-lg group-hover:text-red-600 transition">
-                {prod.name}
-              </h1>
-              <h2 className="mt-1 font-semibold text-green-600">₹ {prod.price}</h2>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2">{prod.description}</p>
-              <button
-                onClick={() => cartAdd(prod)}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg mt-4
-                  hover:from-black hover:to-gray-800 hover:scale-110 transition-all duration-300"
               >
-                Add to Cart
-              </button>
-            </div>
-          ))}
+                <div className="overflow-hidden rounded-t-xl">
+                  <img
+                    src={`https://myrestaurentclean.runasp.net//${prod.profile}`}
+                    alt={prod.name}
+                    className="w-full h-[160px] object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                </div>
+
+                <h1 className="mt-3 font-bold text-lg group-hover:text-red-600 transition">
+                  {prod.name}
+                </h1>
+
+                <h2 className="mt-1 font-semibold text-green-600">
+                  ₹ {prod.price}
+                </h2>
+
+                <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                  {prod.description}
+                </p>
+
+                {!cartItem ? (
+                  <button
+                    onClick={() => cartAdd(prod)}
+                    className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg mt-4 hover:from-black hover:to-gray-800 hover:scale-110 transition-all duration-300"
+                  >
+                    Add to Cart
+                  </button>
+                ) : (
+                  <div className="flex justify-center mt-4">
+                    <div className="flex items-center gap-4 border rounded-lg px-4 py-2">
+                      <button
+                        onClick={() => updateQty(cartItem, "dec")}
+                        className="text-xl font-bold"
+                      >
+                        -
+                      </button>
+
+                      <span className="font-semibold min-w-[20px]">
+                        {cartItem.quantity}
+                      </span>
+
+                      <button
+                        onClick={() => updateQty(cartItem, "inc")}
+                        className="text-xl font-bold"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
